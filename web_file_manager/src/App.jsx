@@ -1,6 +1,7 @@
 import { Routes, Route, Link } from 'react-router-dom';
-// import Home from './components/Home'; // Asegúrate de crear estos componentes
-// import About from './components/About'; 
+import ProtectedRoute from './components/ProtectedRoutes';
+import Login from './components/Login';
+import Home from './components/Home';
 
 function App() {
   return (
@@ -12,10 +13,17 @@ function App() {
       </nav>
       <hr />
       <Routes>
-        {/* <Route path="/" element={<Home />} /> */}
-        {/* <Route path="/acerca" element={<About />} /> */}
-        {/* Ruta para manejar errores o páginas no encontradas */}
-        <Route path="*" element={<h1>404 - Página no encontrada</h1>} />
+        {/* Public routes */}
+        <Route path="login" element={<Login />} />
+
+        {/* Protected routes */}
+        <Route element={<ProtectedRoute />}>  
+          <Route path="/" element={<Home />} /> 
+
+          {/* <Route path="profile" element={<Profile />} /> */}
+          
+        </Route>
+        <Route path="*" element={<h1>404 - Not found page</h1>} />
       </Routes>
     </div>
   );
