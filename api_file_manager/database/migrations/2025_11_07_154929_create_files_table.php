@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('directory', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('parent_id')->nullable();
+            $table->unsignedBigInteger('user_id');
             $table->string('name', 1024);
-            $table->string('color', 30)->nullable();
-            $table->string('icon', 256)->nullable();
-            //$table->integer('items') Number of items inside.
-            //$table->integer('size') size of the folder, and all the items.
+            $table->string('extension', 64);
+            $table->decimal('size', 12,4)->nullable()->default(0); //kb?
+            $table->uuid('uuid')->unique();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('directory');
+        Schema::dropIfExists('files');
     }
 };
