@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('name', 1024);
             $table->string('color', 30)->nullable();
             $table->string('icon', 256)->nullable();
-            //$table->integer('items') Number of items inside.
-            //$table->integer('size') size of the folder, and all the items.
+            $table->integer('items')->nullable()->default(0); //Number of items inside.
+            $table->decimal('size',12,4)->nullable()->default(0); //size of the folder, and all the items.
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
