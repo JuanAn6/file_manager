@@ -17,7 +17,7 @@ I will update all the examples of the api functions while i'm implementing them.
 
 Get user home directori with all the folders and files.
 ```
-POST: /api/v1/get_home_files
+POST: /api/v1/get_home
 {
     directory: '/'
 }

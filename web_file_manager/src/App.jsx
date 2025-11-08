@@ -6,10 +6,9 @@ import Home from './components/Home';
 function App() {
   return (
     <div>
-      {/* Barra de Navegación con Link */}
+      {/* Nav bar */}
       <nav>
-        <Link to="/">Inicio</Link> | 
-        <Link to="/acerca">Acerca de</Link>
+        <Link to="/">Home</Link>
       </nav>
       <hr />
       <Routes>

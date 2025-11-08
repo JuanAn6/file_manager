@@ -3,13 +3,21 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: #000000;
-  background-color: #ffffff;
+  color: #ffffff;
+  background-color: #3f3f3f;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   
+}
+
+a{
+  color:rgb(80, 80, 255);
+  text-decoration: none;
+}
+
+a:hover {
+  color: rgb(40, 40, 200);
 }

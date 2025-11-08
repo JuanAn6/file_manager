@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios'; // La instancia de Axios configurada
 import { useAuth } from '../context/AuthContext'; 
+import '../styles/Login.css';
+
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setshowPassword] = useState('password');
+
   const { login } = useAuth(); // Función para guardar el token globalmente
   const navigate = useNavigate();
 
@@ -24,10 +28,22 @@ function Login() {
     }
   };
 
+  const handleShowPassword = (e) => {
+    if(showPassword == 'password'){
+      setshowPassword('text');
+    }else{
+      setshowPassword('password');
+    }
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
-      {/* ... inputs for email and password ... */}
-      <button type="submit">Log in</button>
+    <form onSubmit={handleSubmit} className='login-form'>
+      <input type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <input type={showPassword} name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      <div className='button-case'>
+        <button type="button" onClick={handleShowPassword}>Show password</button>
+        <button type="submit">Log in</button>
+      </div>
     </form>
   );
 }
