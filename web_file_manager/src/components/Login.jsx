@@ -37,14 +37,19 @@ function Login() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className='login-form'>
-      <input type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      <input type={showPassword} name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      <div className='button-case'>
-        <button type="button" onClick={handleShowPassword}>Show password</button>
-        <button type="submit">Log in</button>
+    <div className='login-container'>
+      <div className='login-box'>
+        <h2>File manager</h2>
+        <form onSubmit={handleSubmit} className='login-form'>
+          <input type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input type={showPassword} name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <div className='button-container'>
+            <button type="button" onClick={handleShowPassword}>Show password</button>
+            <button type="submit">Log in</button>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 }
 export default Login;
