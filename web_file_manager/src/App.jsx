@@ -1,23 +1,26 @@
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoutes';
 import Login from './components/Login';
 import Home from './components/Home';
 import { useAuth } from './context/AuthContext';
 import api from './api/axios'; 
+import {  } from 'react-router-dom';
+
 
 function App() {
+  const navigate = useNavigate();
   const { logout } = useAuth();
+
   const handleLogout = async (evt) =>{
     evt.preventDefault();
     try {
       const response = await api.post('/logout');
       logout();
-      navigate('/');
+      navigate('/login');
     } catch (error) {
       console.error("Error in logout:", error);
     }
   }
-
 
   return (
     <div>
