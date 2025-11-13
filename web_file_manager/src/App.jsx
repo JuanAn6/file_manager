@@ -9,7 +9,7 @@ import {  } from 'react-router-dom';
 
 function App() {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, isAuthenticated } = useAuth();
 
   const handleLogout = async (evt) =>{
     evt.preventDefault();
@@ -24,12 +24,16 @@ function App() {
 
   return (
     <div>
-      {/* Nav bar */}
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="/" onClick={handleLogout}>Logout</Link>
-      </nav>
-      <hr />
+      {isAuthenticated && (
+        <div>
+          {/* Nav bar */}
+          <nav>
+            <Link to="/">Home</Link>
+            <Link to="/" onClick={handleLogout}>Logout</Link>
+          </nav>
+          <hr />
+        </div>
+      )}
       <Routes>
         {/* Public routes */}
         <Route path="login" element={<Login />} />
