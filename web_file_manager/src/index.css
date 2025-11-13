@@ -3,8 +3,8 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color: #ffffff;
-  background-color: #3f3f3f;
+  /* color: #ffffff; */
+  /* background-color: #3f3f3f; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -20,4 +20,36 @@ a{
 
 a:hover {
   color: rgb(40, 40, 200);
+}
+
+.horizontal-nav{
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  border: 1px solid #ccc;
+}
+
+.vertical-nav{
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  bottom: 8px;
+  overflow: hidden;
+  width: 180px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+.main-container{
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+.vertical-expanded{
+  margin-left: 210px;
+}
+
+.no-margin{
+  margin: 0;
 }

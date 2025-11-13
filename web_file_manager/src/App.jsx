@@ -26,27 +26,31 @@ function App() {
     <div>
       {isAuthenticated && (
         <div>
+          <nav className='vertical-nav'>
+            <h2 className='no-margin'>File manager</h2>
+          </nav>
           {/* Nav bar */}
-          <nav>
+          <nav className='horizontal-nav vertical-expanded'>
             <Link to="/">Home</Link>
             <Link to="/" onClick={handleLogout}>Logout</Link>
           </nav>
-          <hr />
         </div>
       )}
-      <Routes>
-        {/* Public routes */}
-        <Route path="login" element={<Login />} />
+      <main className='main-container vertical-expanded'>
+        <Routes>
+          {/* Public routes */}
+          <Route path="login" element={<Login />} />
 
-        {/* Protected routes */}
-        <Route element={<ProtectedRoute />}>  
-          <Route path="/" element={<Home />} /> 
+          {/* Protected routes */}
+          <Route element={<ProtectedRoute />}>  
+            <Route path="/" element={<Home />} /> 
 
-          {/* <Route path="profile" element={<Profile />} /> */}
-          
-        </Route>
-        <Route path="*" element={<h1>404 - Not found page</h1>} />
-      </Routes>
+            {/* <Route path="profile" element={<Profile />} /> */}
+            
+          </Route>
+          <Route path="*" element={<h1>404 - Not found page</h1>} />
+        </Routes>
+      </main>
     </div>
   );
 }
