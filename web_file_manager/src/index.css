@@ -11,6 +11,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   
+  background-color: #eaeaea;
 }
 
 a{
@@ -27,6 +28,10 @@ a:hover {
   display: flex;
   gap: 10px;
   border: 1px solid #ccc;
+  border-radius: 7px;
+  background-color: white;
+
+  transition: 300ms;
 }
 
 .vertical-nav{
@@ -37,13 +42,23 @@ a:hover {
   overflow: hidden;
   width: 180px;
   padding: 10px;
+  
   border: 1px solid #ccc;
+  border-radius: 7px;
+  background-color: white;
+
+  transition: 300ms;
 }
 
 .main-container{
   margin-top: 10px;
   padding: 10px;
+  
   border: 1px solid #ccc;
+  border-radius: 7px;
+  background-color: white;
+
+  transition: 300ms;
 }
 
 .vertical-expanded{
@@ -52,4 +67,16 @@ a:hover {
 
 .no-margin{
   margin: 0;
+}
+
+.position-out{
+  left: -220px;
+}
+
+.d-none{
+  display: none;
+}
+
+button{
+  cursor: pointer;
 }
