@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext'; 
 import '../styles/Login.css';
+import eyeFilled from '../icons/eye-filled.svg';
+import eyeOutlined from '../icons/eye-outlined.svg';
 
 
 function Login() {
@@ -44,7 +46,13 @@ function Login() {
           <input type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           <input type={showPassword} name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           <div className='button-container'>
-            <button type="button" onClick={handleShowPassword}>Show password</button>
+            <button type="button" onClick={handleShowPassword}>
+              { showPassword == 'password' ?
+                <img src={eyeOutlined} alt='icon' />
+                : 
+                <img src={eyeFilled} alt='icon' />
+              }
+            </button>
             <button type="submit">Log in</button>
           </div>
         </form>
