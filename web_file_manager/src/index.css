@@ -26,12 +26,36 @@ a:hover {
 .horizontal-nav{
   padding: 10px;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   gap: 10px;
   border: 1px solid #ccc;
   border-radius: 7px;
   background-color: white;
 
   transition: 300ms;
+}
+
+.horizontal-nav-box{
+  display: flex;
+  gap:10px;
+}
+
+.profile-nav{
+  display: block;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+
+  transition: 200ms;
+}
+
+.profile-nav:active{
+  width: 25px;
+  height: 25px;
+  margin: 5px;
 }
 
 .vertical-nav{

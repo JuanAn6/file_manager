@@ -5,6 +5,7 @@ import Home from './components/Home';
 import { useAuth } from './context/AuthContext';
 import api from './api/axios'; 
 import { useState } from 'react';
+import emptyProfile from './icons/profile.png'
 
 
 function App() {
@@ -26,7 +27,6 @@ function App() {
 
   const handleExpandContractMenu = ()=>{
     setNavExpanded(!navExpanded);
-    console.log(navExpanded);
   }
 
   return (
@@ -39,9 +39,12 @@ function App() {
           </nav>
           {/* Nav bar */}
           <nav className={'horizontal-nav '+ (navExpanded? 'vertical-expanded ':'')}>
-            <button onClick={handleExpandContractMenu}>Show/hide</button>
-            <Link to="/">Home</Link>
-            <Link to="/" onClick={handleLogout}>Logout</Link>
+            <div className='horizontal-nav-box'>
+              <button onClick={handleExpandContractMenu}>Show/hide</button>
+              <Link to="/">Home</Link>
+              <Link to="/" onClick={handleLogout}>Logout</Link>
+            </div>
+            <img src={emptyProfile} className='profile-nav' title='Profile' />
           </nav>
         </div>
       )}
