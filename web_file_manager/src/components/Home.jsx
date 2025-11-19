@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
+import Menu from './custom/Menu';
 
 function Home() {
   
@@ -9,6 +10,9 @@ function Home() {
   return (
     <div >
       <h1>Home page</h1>
+      <Menu trigger={<button>Open</button>}>
+        <span>This is a pop up menu!</span>
+      </Menu>
     </div>
   );
 }
