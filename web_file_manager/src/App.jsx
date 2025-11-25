@@ -6,6 +6,7 @@ import { useAuth } from './context/AuthContext';
 import api from './api/axios'; 
 import { useState } from 'react';
 import emptyProfile from './icons/profile.png'
+import SearchBar from './components/SearchBar';
 
 
 function App() {
@@ -43,6 +44,9 @@ function App() {
               <button onClick={handleExpandContractMenu}>Show/hide</button>
               <Link to="/">Home</Link>
               <Link to="/" onClick={handleLogout}>Logout</Link>
+            </div>
+            <div className='search-box'>
+              <SearchBar></SearchBar>
             </div>
             <img src={emptyProfile} className='profile-nav' title='Profile' />
           </nav>

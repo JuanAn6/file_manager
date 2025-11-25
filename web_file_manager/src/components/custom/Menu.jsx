@@ -1,11 +1,22 @@
 import { useState, useRef, useEffect } from "react";
 import '../../styles/Menu.css';
 
-function Menu({ trigger, children }) {
-  const [open, setOpen] = useState(false);
+function Menu({ trigger, children, isOpen, onOpenChange }) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = isOpen !== undefined ? isOpen : internalOpen;
+
   const ref = useRef(null);
 
-  const toggle = () => setOpen(o => !o);
+  const toggle = () => {
+    const newValue = !open;
+    if (onOpenChange) onOpenChange(newValue);
+    else setInternalOpen(newValue);
+  };
+
+  const setOpen = (value) => {
+    if (onOpenChange) onOpenChange(value);
+    else setInternalOpen(value);
+  };
 
   // Close if click outside
   useEffect(() => {
