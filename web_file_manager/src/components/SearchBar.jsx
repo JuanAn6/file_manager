@@ -15,7 +15,7 @@ function SearchBar() {
     let value = e.target.value; 
     setQuery(value);
     console.log(value);
-    if(value.trim().length > 3){
+    if(value.trim().length >= 3){
       setOpenMenu(true)
     }else{
       setOpenMenu(false)
@@ -25,8 +25,9 @@ function SearchBar() {
   
   return (
     <div className='search-input-box'>
-      <input type="text" placeholder='Search something...' onChange={handleSearch} value={searchQuery} />
-      <Menu isOpen={openMenu} onOpenChange={setOpenMenu}>
+      <Menu isOpen={openMenu} onOpenChange={setOpenMenu} customTrigger={
+        <input type="text" placeholder='Search something...' onChange={handleSearch} value={searchQuery} />
+      }>
         <span>Results:</span>
         <div><Loading/></div>
       </Menu>

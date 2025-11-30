@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import '../../styles/Menu.css';
 
-function Menu({ trigger, children, isOpen, onOpenChange }) {
+function Menu({ trigger, children, isOpen, onOpenChange, customTrigger }) {
   const [internalOpen, setInternalOpen] = useState(false);
   const open = isOpen !== undefined ? isOpen : internalOpen;
 
@@ -34,7 +34,7 @@ function Menu({ trigger, children, isOpen, onOpenChange }) {
       <div onClick={toggle} style={{ cursor: "pointer" }}>
         {trigger}
       </div>
-
+      { customTrigger }
       {open && (
         <div className='menu-custom'>
           {children}

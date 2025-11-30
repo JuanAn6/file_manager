@@ -14,7 +14,6 @@ function Home() {
       <Menu trigger={<button>Open</button>}>
         <span>This is a pop up menu!</span>
       </Menu>
-      <div><Loading/></div>
     </div>
   );
 }
