@@ -4,14 +4,14 @@ import Login from './components/Login';
 import Home from './components/Home';
 import { useAuth } from './context/AuthContext';
 import api from './api/axios'; 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import emptyProfile from './icons/profile.png'
-import SearchBar from './components/SearchBar';
+import SearchBar from './components/custom/SearchBar';
 
 
 function App() {
   const navigate = useNavigate();
-  const { logout, isAuthenticated } = useAuth();
+  const { logout, isAuthenticated, checkToken } = useAuth();
   
   const [navExpanded, setNavExpanded] = useState(true);
 
@@ -29,6 +29,14 @@ function App() {
   const handleExpandContractMenu = ()=>{
     setNavExpanded(!navExpanded);
   }
+
+  
+  useEffect(() => {
+    //Check token every time the page changes
+    if(location.pathname != '/login'){
+      checkToken();
+    }
+  }, [location.pathname]);
 
   return (
     <div>

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import api from '../api/axios'; 
 
 const AuthContext = createContext(null);
 
@@ -18,12 +19,24 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     localStorage.removeItem('authToken');
   };
+
+  const checkToken = async () => {
+    try {
+      const response = await api.post('/check_token');
+      if(!response.data.valid){ 
+        logout();
+      }
+    } catch (error) {
+      logout();
+      console.error("Error validating token:", error);
+    }
+  }
   
   // 'isAuthenticated' is crucial for ProtectedRoute
   const isAuthenticated = !!token; 
 
   return (
-    <AuthContext.Provider value={{ token, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ token, isAuthenticated, login, logout, checkToken }}>
       {children}
     </AuthContext.Provider>
   );

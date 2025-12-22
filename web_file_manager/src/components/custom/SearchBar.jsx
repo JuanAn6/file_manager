@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../api/axios';
-import Menu from './custom/Menu';
-import Loading from './custom/Loading';
-import '../styles/SearchBar.css';
+import api from '../../api/axios';
+import Menu from './Menu';
+import Loading from './Loading';
+import '../../styles/SearchBar.css';
 
 function SearchBar() {
   const navigate = useNavigate();

@@ -3,17 +3,33 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import Menu from './custom/Menu';
 import Loading from './custom/Loading';
+import FileList from './custom/FileList';
 
 function Home() {
   
   const navigate = useNavigate();
 
+  const [items, setItems] = useState([
+    {
+      name: 'Test',
+      user_id: 1,
+      user:{ name: 'Juan' },
+      type: 2, //1 Directory, 2 File
+      size: 124, //kb
+      extension: '.pdf',
+      created_at: new Date(), 
+      updated_at: new Date(),
+    }
+  ]);
+  
   return (
     <div >
-      <h1>Home page</h1>
+      <h3>Breadcrumbs</h3>
       <Menu trigger={<button>Open</button>}>
         <span>This is a pop up menu!</span>
       </Menu>
+
+      <FileList items={items} />
     </div>
   );
 }

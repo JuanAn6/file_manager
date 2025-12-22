@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
@@ -64,6 +66,20 @@ class AuthController extends Controller
         }
 
         return response()->json(['message' => 'Successfully logged out']);
+    }
+    public function checkToken(Request $request)
+    {
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+            return response()->json(['valid' => true, 'data' => 'Token valid'], 200);
+        } catch (TokenExpiredException $e) {
+            return response()->json(['error' => 'Expired token'], 401);
+        } catch (TokenInvalidException $e) {
+            return response()->json(['error' => 'Invalid token'], 401);
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'Token not found'], 401);
+        }
+        
     }
 
     public function getUser()
