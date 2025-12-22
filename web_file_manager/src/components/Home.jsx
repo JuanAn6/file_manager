@@ -11,14 +11,15 @@ function Home() {
 
   const [items, setItems] = useState([
     {
+      id: 1,  
       name: 'Test',
       user_id: 1,
       user:{ name: 'Juan' },
       type: 2, //1 Directory, 2 File
       size: 124, //kb
       extension: '.pdf',
-      created_at: new Date(), 
-      updated_at: new Date(),
+      created_at: '2024-12-01', 
+      updated_at: '2025-03-10',
     }
   ]);
   

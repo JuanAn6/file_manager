@@ -1,0 +1,17 @@
+.container{
+    width: 80%;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 7px;
+    margin: 5px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.list{
+    width: 100%;
+    border-spacing: 0;
+    user-select: none;
+}
+.list td,th{
+    border-bottom: 1px solid #cccccc;
+}
