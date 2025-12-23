@@ -75,14 +75,18 @@ a:hover {
 }
 
 .main-container{
+  display: flex;
+  flex-direction: column;
+  gap:10px;
   margin-top: 10px;
-  padding: 10px;
-  
+  transition: 300ms;
+}
+
+.custom-container{
   border: 1px solid #ccc;
   border-radius: 7px;
   background-color: white;
-
-  transition: 300ms;
+  padding: 10px;
 }
 
 .vertical-expanded{

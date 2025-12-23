@@ -10,8 +10,32 @@
 .list{
     width: 100%;
     border-spacing: 0;
-    user-select: none;
+    /* user-select: none; */
 }
 .list td,th{
     border-bottom: 1px solid #cccccc;
+}
+
+.list .td-icon,.td-name,.td-owner,.td-date,.td-date,.td-size,.td-actions{
+    text-align: center; 
+}
+.list .th-name{ 
+    text-align: start; 
+}
+.list .td-name{
+    text-align: start;
+    width: 40%;
+}
+.action-menu .menu-custom{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap:5px;
+
+    right: 0;
+    left:auto;
+    
+    min-height: auto;
+    min-width: auto;
+    width:100px;
 }

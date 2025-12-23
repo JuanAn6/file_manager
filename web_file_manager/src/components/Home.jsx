@@ -24,14 +24,15 @@ function Home() {
   ]);
   
   return (
-    <div >
-      <h3>Breadcrumbs</h3>
-      <Menu trigger={<button>Open</button>}>
-        <span>This is a pop up menu!</span>
-      </Menu>
+    <>
+    <div className="custom-container">
+      <h3>Breadcrumbs</h3> 
+    </div>
 
+    <div className="custom-container">
       <FileList items={items} />
     </div>
+    </>
   );
 }
 export default Home;
