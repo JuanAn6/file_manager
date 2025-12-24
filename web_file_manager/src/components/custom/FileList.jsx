@@ -22,7 +22,7 @@ function FileList({items}) {
             <th>Owner</th>
             <th>Modified at</th>
             <th>Created at</th>
-            <th>Size</th>
+            <th>Size / Items</th>
             <th>Actions</th>
           </tr>
         </thead>

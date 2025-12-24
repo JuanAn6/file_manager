@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import Menu from './custom/Menu';
@@ -8,6 +8,7 @@ import FileList from './custom/FileList';
 function Home() {
   
   const navigate = useNavigate();
+  const [loadingComplete, setLoadingComplete] = useState(false); 
 
   const [items, setItems] = useState([
     {
@@ -22,15 +23,57 @@ function Home() {
       updated_at: '2025-03-10',
     }
   ]);
+
+  const [parent, setParent] = useState(null)
+
+  const getDirectory = async () =>{
+    setLoadingComplete(false);
+    try {
+      const response = await api.post('/get_directory', {parent_id: parent});
+      combineDirectoriesAndFiles(response.data)
+      setLoadingComplete(true);
+    } catch (error) {
+      console.error("Error in logout:", error);
+    }
+  }
+
+  //Make combination of both types
+  const combineDirectoriesAndFiles = (data) => {
+    console.log(data);
+    let tempItems = [];
+
+    data.directories.forEach(item => {
+      item.type = 1;
+      item.extension = '';
+      item.size = 0;
+      tempItems.push(item);
+    })
+
+    data.files.forEach(item => {
+      item.type = 2;
+      tempItems.push(item);
+    })
+    console.log('tempItems', tempItems);
+    setItems(tempItems);
+
+  }
+
+  useEffect(()=>{
+    getDirectory();
+  },[])
+
   
   return (
     <>
     <div className="custom-container">
       <h3>Breadcrumbs</h3> 
     </div>
-
     <div className="custom-container">
-      <FileList items={items} />
+      {!loadingComplete ? 
+        <Loading></Loading>
+      :
+        <FileList items={items} />
+      }
     </div>
     </>
   );

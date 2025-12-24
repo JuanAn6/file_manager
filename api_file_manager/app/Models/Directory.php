@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Directory extends Model
 {
     //
+    protected $table = 'directory';
 
     protected $fillable = [
         'user_id',
@@ -17,5 +18,9 @@ class Directory extends Model
         'items',
         'size',        
     ];
+
+    public function user(){
+        return self::belongsTo(User::class, 'user_id');
+    }
 
 }

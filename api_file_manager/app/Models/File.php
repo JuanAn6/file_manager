@@ -18,5 +18,7 @@ class File extends Model
     ];
 
 
-    
+    public function user(){
+        return self::belongsTo(User::class, 'user_id');
+    }
 }

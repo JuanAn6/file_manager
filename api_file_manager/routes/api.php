@@ -13,7 +13,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('jwt')->group(function () { //Auth routes
         
         //FILES AND DIRECTORIS
-        Route::post('/get_home', [HomeController::class, 'getHome']);
+        Route::post('/get_directory', [HomeController::class, 'getDirectory']);
 
         //USER
         Route::get('/user', [AuthController::class, 'getUser']);
