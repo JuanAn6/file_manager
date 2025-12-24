@@ -11,9 +11,26 @@
     width: 100%;
     border-spacing: 0;
     /* user-select: none; */
+    /* border: 1px solid #cccccc; */
+    border-radius: 7px;
 }
+
 .list td,th{
-    border-bottom: 1px solid #cccccc;
+    padding-top:5px;
+    padding-bottom:5px;
+    /* border-bottom: 1px solid #cccccc; */
+}
+
+.list tbody tr:hover{
+    background-color: #144bff0a;
+    transition: 300ms;
+}
+.list tbody tr:active{
+    background-color: #144bff20;
+}
+
+.td-check input {
+    cursor: pointer;
 }
 
 .list .td-icon,.td-name,.td-owner,.td-date,.td-date,.td-size,.td-actions{
@@ -26,6 +43,8 @@
     text-align: start;
     width: 40%;
 }
+
+
 .action-menu .menu-custom{
     display: flex;
     justify-content: center;
