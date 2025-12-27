@@ -1,0 +1,19 @@
+.breadcrumbs-container{
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb{
+    display: flex;
+    align-items: center;
+    cursor:pointer;
+}
+
+.breadcrumb:active{
+    color:#5050ff;
+}
+
+.breadcrumb-icon{
+    width: 25px;
+    height: 25px;
+}

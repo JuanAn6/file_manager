@@ -4,6 +4,7 @@ import api from '../api/axios';
 import Menu from './custom/Menu';
 import Loading from './custom/Loading';
 import FileList from './custom/FileList';
+import BreadCrumbs from './custom/BreadCrumbs';
 
 function Home() {
   
@@ -39,7 +40,7 @@ function Home() {
 
   //Make combination of both types
   const combineDirectoriesAndFiles = (data) => {
-    console.log(data);
+    // console.log(data);
     let tempItems = [];
 
     data.directories.forEach(item => {
@@ -53,26 +54,34 @@ function Home() {
       item.type = 2;
       tempItems.push(item);
     })
-    console.log('tempItems', tempItems);
+    // console.log('tempItems', tempItems);
     setItems(tempItems);
 
+  }
+
+  const goFolder = (insideFloerId)=>{
+    console.log('goFolder: ', insideFloerId);
+    setParent(insideFloerId);
+    getDirectory()
   }
 
   useEffect(()=>{
     getDirectory();
   },[])
 
+  //Enter a folder and change breadcrumbs
   
   return (
     <>
     <div className="custom-container">
-      <h3>Breadcrumbs</h3> 
+      <BreadCrumbs items={items} goFolder={goFolder} /> 
+      {parent?.name}
     </div>
     <div className="custom-container">
       {!loadingComplete ? 
         <Loading></Loading>
       :
-        <FileList items={items} />
+        <FileList items={items} goFolder={goFolder} />
       }
     </div>
     </>

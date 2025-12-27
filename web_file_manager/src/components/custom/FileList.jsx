@@ -6,14 +6,23 @@ import dots_icon from '../../icons/dots.svg'
 import ActionMenu from '../custom/ActionMenu';
 import { formatDateFromDatabse } from '../../utils/utils'
 
-function FileList({items}) {
+function FileList({items, goFolder}) {
 
   useEffect(()=>{
     // console.log(items);
   },[items])
 
+  //New folder
+
+  //Update name of item (Update in line)
+
+  //Drop item
+
+  //Right click menu
+
   return (
     <div>
+      <button>New Folder</button>
       <table className='list'>
         <thead>
           <tr>
@@ -29,7 +38,7 @@ function FileList({items}) {
         </thead>
         <tbody>
           {items.map(item => 
-            <tr key={item.id}>
+            <tr key={item.id} onDoubleClick={ () => goFolder(item.id) } >
               <td className='td-check'><input type='checkbox'/></td>
               <td className='td-icon'>📁</td>
               <td className='td-name'>{item.name}</td>

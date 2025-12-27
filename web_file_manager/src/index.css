@@ -15,12 +15,12 @@
 }
 
 a{
-  color:rgb(80, 80, 255);
+  color:#5050ff;
   text-decoration: none;
 }
 
 a:hover {
-  color: rgb(40, 40, 200);
+  color: #2828c8;
 }
 
 .horizontal-nav{
