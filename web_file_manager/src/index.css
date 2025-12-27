@@ -23,6 +23,24 @@ a:hover {
   color: #2828c8;
 }
 
+.navigation-items{
+  display: flex;
+  flex-direction: column;
+}
+
+.navigation-items a{
+  display: block;
+  gap:5px;
+  margin-bottom: 5px;
+  padding-left: 7px;
+  border-radius: 5px;
+  border:1px solid #ccc;
+}
+.navigation-items a:hover{
+  transition: 200ms;
+  background-color: #007bff3e;
+}
+
 .horizontal-nav{
   padding: 10px;
   display: flex;

@@ -45,13 +45,22 @@ function App() {
           <nav id="vertical-nav" className={'vertical-nav '+ (navExpanded? '':'position-out')}>
             <h2 className='no-margin'>File manager</h2>
             <span>{navExpanded}</span>
+            <div className='navigation-items'>
+              <Link to="/">Home</Link>
+              <Link to="/pdfs">Pdf</Link>
+              <Link to="/documents">Documnes</Link>
+              <Link to="/documents">Images</Link>
+              <Link to="/videos">Videos</Link>
+              <Link to="/audios">Audios</Link>
+              <Link to="/storage">Storage</Link>
+              <Link to="/profile">Profile</Link>
+              <Link to="/" onClick={handleLogout}>Logout</Link>
+            </div>
           </nav>
           {/* Nav bar */}
           <nav className={'horizontal-nav '+ (navExpanded? 'vertical-expanded ':'')}>
             <div className='horizontal-nav-box'>
               <button onClick={handleExpandContractMenu}>Show/hide</button>
-              <Link to="/">Home</Link>
-              <Link to="/" onClick={handleLogout}>Logout</Link>
             </div>
             <div className='search-box'>
               <SearchBar></SearchBar>
