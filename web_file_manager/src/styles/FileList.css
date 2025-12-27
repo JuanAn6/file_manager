@@ -44,7 +44,6 @@
     width: 40%;
 }
 
-
 .action-menu .menu-custom{
     display: flex;
     justify-content: center;
@@ -57,4 +56,12 @@
     min-height: auto;
     min-width: auto;
     width:100px;
+}
+
+.action-button {
+    width:25px; 
+    height:25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

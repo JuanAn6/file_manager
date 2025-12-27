@@ -6,7 +6,11 @@ import dots_icon from '../../icons/dots.svg'
 import ActionMenu from '../custom/ActionMenu';
 import { formatDateFromDatabse } from '../../utils/utils'
 
-function FileList({items, goFolder}) {
+import { useState } from 'react'
+
+function FileList({items, setItems, goFolder}) {
+
+  const [selectedItems, setSelectedItems] = useState([]);
 
   useEffect(()=>{
     // console.log(items);
@@ -16,9 +20,39 @@ function FileList({items, goFolder}) {
 
   //Update name of item (Update in line)
 
-  //Drop item
+  //Delete item
 
   //Right click menu
+
+
+  //Selected items (implement shift function and ctrl functionalty???)
+  const changeSelection = (index, select) => {
+    console.log('changeSelection', index, select);
+    let newItems = [];
+    //Select all
+    if(index == null && select){
+      newItems = items.map((ele) => {
+        ele.checked = select;
+        return ele;
+      });
+    }
+    //Unselect all
+    if(index == null && !select){
+      newItems = items.map((ele) => {
+        ele.checked = select;
+        return ele; 
+      });
+    }
+    //Select / un select single item
+    if(index != null){
+      newItems = items.map((item, i) => {
+        if (i === index) { return { ...item, checked: select }; }
+        return item;
+      }); 
+    }
+    console.log(newItems);
+    setItems(newItems);
+  }
 
   return (
     <div>
@@ -26,7 +60,7 @@ function FileList({items, goFolder}) {
       <table className='list'>
         <thead>
           <tr>
-            <td className='td-check'><input type='checkbox'/></td>
+            <td className='td-check'><input type='checkbox' onChange={(evt) => changeSelection(null, evt.target.checked)}/></td>
             <th>Icon</th>
             <th className='th-name'>Name</th>
             <th>Owner</th>
@@ -37,9 +71,9 @@ function FileList({items, goFolder}) {
           </tr>
         </thead>
         <tbody>
-          {items.map(item => 
-            <tr key={item.id} onDoubleClick={ () => goFolder(item.id) } >
-              <td className='td-check'><input type='checkbox'/></td>
+          {items.map((item, index) => 
+            <tr key={item.id} onDoubleClick={ () => goFolder(item.id) } onClick={() => changeSelection(index, !item.checked)} >
+              <td className='td-check'><input type='checkbox' checked={item.checked} onChange={(evt) => changeSelection(index, evt.target.checked)} /></td>
               <td className='td-icon'>📁</td>
               <td className='td-name'>{item.name}</td>
               <td className='td-owner'>{item.user.name}</td>
@@ -47,7 +81,7 @@ function FileList({items, goFolder}) {
               <td className='td-date'>{formatDateFromDatabse(item.updated_at)}</td>
               <td className='td-size'>{item.size}</td>
               <td className='td-actions'>
-                <ActionMenu trigger={<button><img width='20' src={dots_icon}/></button>}>
+                <ActionMenu trigger={<button className='action-button' ><img width='20' src={dots_icon}/></button>}>
                   <button><img width='20' src={edit_icon}/> Edit</button>
                   <button><img width='20' src={trash_icon}/> Delete</button>
                 </ActionMenu>

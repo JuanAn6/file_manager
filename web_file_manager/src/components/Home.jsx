@@ -47,11 +47,13 @@ function Home() {
       item.type = 1;
       item.extension = '';
       item.size = 0;
+      item.checked = false;
       tempItems.push(item);
     })
 
     data.files.forEach(item => {
       item.type = 2;
+      item.checked = false;
       tempItems.push(item);
     })
     // console.log('tempItems', tempItems);
@@ -81,7 +83,7 @@ function Home() {
       {!loadingComplete ? 
         <Loading></Loading>
       :
-        <FileList items={items} goFolder={goFolder} />
+        <FileList items={items} setItems={setItems} goFolder={goFolder} />
       }
     </div>
     </>
