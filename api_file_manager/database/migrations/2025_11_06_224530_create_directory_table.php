@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('parent_id')->nullable();
-            $table->string('name', 1024);
+            $table->string('name', length: 1024);
             $table->string('color', 30)->nullable();
             $table->string('icon', 256)->nullable();
             $table->integer('items')->nullable()->default(0); //Number of items inside.

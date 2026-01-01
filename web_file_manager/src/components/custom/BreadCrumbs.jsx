@@ -5,7 +5,7 @@ import home from '../../icons/home.svg'
 function BreadCrumbs({items, goFolder }) {
 
   useEffect(()=>{
-    // console.log(items);
+    // console.log('breadcrumbs', items);
   },[items])
 
   //Go home

@@ -10,8 +10,7 @@ import { useState } from 'react'
 
 function FileList({items, setItems, goFolder}) {
 
-  const [selectedItems, setSelectedItems] = useState([]);
-
+  
   useEffect(()=>{
     // console.log(items);
   },[items])
@@ -27,7 +26,6 @@ function FileList({items, setItems, goFolder}) {
 
   //Selected items (implement shift function and ctrl functionalty???)
   const changeSelection = (index, select) => {
-    console.log('changeSelection', index, select);
     let newItems = [];
     //Select all
     if(index == null && select){
@@ -50,13 +48,11 @@ function FileList({items, setItems, goFolder}) {
         return item;
       }); 
     }
-    console.log(newItems);
     setItems(newItems);
   }
 
   return (
     <div>
-      <button>New Folder</button>
       <table className='list'>
         <thead>
           <tr>
