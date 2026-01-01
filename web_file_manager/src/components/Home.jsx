@@ -14,6 +14,7 @@ function Home() {
   const [parent, setParent] = useState(null)
   const [modalNewFolderOpen, setModalNewFolderOpen] = useState(false)
   const [newFolderName, setNewFolderName] = useState(''); 
+  const [breadcrumbs, setBreadcrumbs] = useState([]);
   const [items, setItems] = useState([
     {
       id: 1,  
@@ -66,18 +67,12 @@ function Home() {
     })
     // console.log('tempItems', tempItems);
     setItems(tempItems);
-
+    setBreadcrumbs(data.breadcrumbs.reverse());
   }
 
   const goFolder = (insideFloerId)=>{
-    console.log('goFolder: ', insideFloerId);
     setParent(insideFloerId);
-    // getDirectory(insideFloerId)
   }
-
-  useEffect(()=>{
-    getDirectory();
-  },[])
 
   const createNewFolder = async (evt) =>{
     evt.target.disabled = true;
@@ -106,7 +101,7 @@ function Home() {
   return (
     <>
     <div className='custom-container'>
-      <BreadCrumbs items={items} goFolder={goFolder} /> 
+      <BreadCrumbs items={breadcrumbs} goFolder={goFolder} /> 
       {parent?.name}
     </div>
     <div className='custom-container'>
