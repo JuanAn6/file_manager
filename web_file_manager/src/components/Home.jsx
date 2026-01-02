@@ -102,7 +102,6 @@ function Home() {
     <>
     <div className='custom-container'>
       <BreadCrumbs items={breadcrumbs} goFolder={goFolder} /> 
-      {parent?.name}
     </div>
     <div className='custom-container'>
       {!loadingComplete ? 

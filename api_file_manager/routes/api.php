@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\JwtMiddleware;
 Route::prefix('v1')->group(function () {
@@ -20,6 +21,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/user', [AuthController::class, 'getUser']);
         Route::put('/user', [AuthController::class, 'updateUser']);
         Route::post('/logout', [AuthController::class, 'logout']);
+
+        //Protect this routes with rols
+        Route::middleware(['auth:api', 'role:superadmin'])->group(function () {
+            Route::post('/get_list_users', [UsersController::class, 'getList']);
+        });
     });
     
 });

@@ -63,7 +63,7 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function rol(){
+    public function role(){
         return $this->belongsTo(Rol::class, 'rol_id');
     }
 }
