@@ -19,8 +19,9 @@ function Login() {
     e.preventDefault();
     try {
       const response = await api.post('/login', { email, password });
+      const user = response.data.user
       const authToken = response.data.token; 
-      login(authToken); // Save the token in the global and localStorage states
+      login(authToken, user); // Save the token in the global and localStorage states
       
       navigate('/'); // Redirect the user to the (protected) homepage
 

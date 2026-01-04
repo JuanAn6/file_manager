@@ -12,7 +12,8 @@ class UsersController extends Controller
 
     public function getList(Request $request){
         
-        $list = User::paginate(10);
+        $params = $request->all();
+        $list = User::paginate($params['pageSize'], ['*'], 'page', $params['page']);
         return response()->json($list);
     }
 }

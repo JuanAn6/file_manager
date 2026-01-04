@@ -126,3 +126,7 @@ a:hover {
 button{
   cursor: pointer;
 }
+
+.admin-menu{
+  margin-top: 10px;
+}

@@ -47,6 +47,7 @@ class AuthController extends Controller
             if (!$token = JWTAuth::attempt($credentials)) {
                 return response()->json(['error' => 'Invalid credentials'], 401);
             }
+            $user = Auth::user();
         } catch (JWTException $e) {
             return response()->json(['error' => 'Could not create token', 'message' => $e->getMessage()], 500);
         }
@@ -54,6 +55,11 @@ class AuthController extends Controller
         return response()->json([
             'token' => $token,
             'expires_in' => auth('api')->factory()->getTTL() * 60,
+            'user' => [
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->rol_id,
+            ],
         ]);
     }
 

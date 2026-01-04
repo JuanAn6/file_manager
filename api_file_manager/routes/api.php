@@ -24,7 +24,7 @@ Route::prefix('v1')->group(function () {
 
         //Protect this routes with rols
         Route::middleware(['auth:api', 'role:superadmin'])->group(function () {
-            Route::post('/get_list_users', [UsersController::class, 'getList']);
+            Route::get('/get_users_list', [UsersController::class, 'getList']);
         });
     });
     

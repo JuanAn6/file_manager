@@ -2,6 +2,7 @@ import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoutes';
 import Login from './components/Login';
 import Home from './components/Home';
+import UsersList from './components/UsersList';
 import { useAuth } from './context/AuthContext';
 import api from './api/axios'; 
 import { useState, useEffect } from 'react';
@@ -11,7 +12,7 @@ import SearchBar from './components/custom/SearchBar';
 
 function App() {
   const navigate = useNavigate();
-  const { logout, isAuthenticated, checkToken } = useAuth();
+  const { logout, isAuthenticated, role, checkToken } = useAuth();
   
   const [navExpanded, setNavExpanded] = useState(true);
 
@@ -55,6 +56,11 @@ function App() {
               <Link to="/storage">Storage</Link>
               <Link to="/profile">Profile</Link>
               <Link to="/" onClick={handleLogout}>Logout</Link>
+              {isAuthenticated && role == 1? 
+                <div className='admin-menu'>
+                  <Link to="/users" >Users</Link>
+                </div> 
+              : <></>}
             </div>
           </nav>
           {/* Nav bar */}
@@ -78,7 +84,7 @@ function App() {
           {/* Protected routes */}
           <Route element={<ProtectedRoute />}>  
             <Route path="/" element={<Home />} /> 
-
+            <Route path="/users" element={<UsersList />} /> 
             {/* <Route path="profile" element={<Profile />} /> */}
             
           </Route>

@@ -1,0 +1,17 @@
+.list{
+    width: 100%;
+    border-spacing: 0;
+    /* user-select: none; */
+    /* border: 1px solid #cccccc; */
+    border-radius: 7px;
+}
+
+.list .row{
+    border-bottom: 1px solid #cccccc;
+}
+
+.pagination{
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
