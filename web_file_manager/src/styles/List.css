@@ -6,12 +6,29 @@
     border-radius: 7px;
 }
 
-.list .row{
-    border-bottom: 1px solid #cccccc;
-}
-
 .pagination{
     margin-top: 10px;
     display: flex;
     justify-content: space-between;
 }
+.list .pagination .buttons-pages{
+    display: flex;
+    gap:5px;
+}
+
+.list .header-section{
+    display: flex;
+    border-bottom: 1px solid #aeaeae;
+}
+.list .header-section .header{
+    width: 15%;
+}
+.list .body-section .row{
+    display: flex;
+    border-bottom: 1px solid #cccccc;
+}
+
+.list .body-section .cell{
+    width: 15%;
+}
+

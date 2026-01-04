@@ -15,7 +15,7 @@ class TestUsers extends Seeder
     {
         //
         User::factory()
-            ->count(20)
+            ->count(100)
             ->sequence(fn ($sequence) => ['email' => 'user' . $sequence->index . '@filemanager.net'])
             ->create([
                 'rol_id' => 3,
