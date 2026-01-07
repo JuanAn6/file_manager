@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Rol;
 use App\Models\User;
+use Database\Seeders\TestUsers;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -28,5 +29,6 @@ class DatabaseSeeder extends Seeder
             'rol_id' => 1,
         ]);
         
+        (new TestUsers())->run();
     }
 }

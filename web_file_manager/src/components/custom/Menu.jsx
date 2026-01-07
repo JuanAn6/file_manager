@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import '../../styles/Menu.css';
 
-function Menu({ trigger, children, isOpen, onOpenChange, customTrigger }) {
+function Menu({ trigger, children, isOpen, onOpenChange, customTrigger, customStyle }) {
   const [internalOpen, setInternalOpen] = useState(false);
   const open = isOpen !== undefined ? isOpen : internalOpen;
 
@@ -36,7 +36,7 @@ function Menu({ trigger, children, isOpen, onOpenChange, customTrigger }) {
       </div>
       { customTrigger }
       {open && (
-        <div className='menu-custom'>
+        <div className='menu-custom' style={customStyle} >
           {children}
         </div>
       )}

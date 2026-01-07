@@ -130,3 +130,21 @@ button{
 .admin-menu{
   margin-top: 10px;
 }
+
+
+
+.profile-menu-items{
+  display: flex;
+  flex-direction: column;
+  gap:5px;
+}
+.profile-menu-items a{
+  display: block;
+  padding-left: 7px;
+  border-radius: 5px;
+  border:1px solid #ccc;
+}
+.profile-menu-items a:hover{
+  transition: 200ms;
+  background-color: #007bff3e;
+}

@@ -8,11 +8,20 @@ import api from './api/axios';
 import { useState, useEffect } from 'react';
 import emptyProfile from './icons/profile.png'
 import SearchBar from './components/custom/SearchBar';
+import Menu from './components/custom/Menu';
 
 
 function App() {
   const navigate = useNavigate();
   const { logout, isAuthenticated, role, checkToken } = useAuth();
+
+  const profileMenuStyles = {
+    left: '100%',
+    transform: 'translateX(-100%)',
+    height:'fit-content',
+    'min-height': 'auto',
+    'min-width': '100px',
+  };
   
   const [navExpanded, setNavExpanded] = useState(true);
 
@@ -55,7 +64,6 @@ function App() {
               <Link to="/audios">Audios</Link>
               <Link to="/storage">Storage</Link>
               <Link to="/profile">Profile</Link>
-              <Link to="/" onClick={handleLogout}>Logout</Link>
               {isAuthenticated && role == 1? 
                 <div className='admin-menu'>
                   <Link to="/users" >Users</Link>
@@ -71,7 +79,15 @@ function App() {
             <div className='search-box'>
               <SearchBar></SearchBar>
             </div>
-            <img src={emptyProfile} className='profile-nav' title='Profile' />
+            <Menu 
+              trigger={<img src={emptyProfile} className='profile-nav' title='Profile' />}
+              customStyle={profileMenuStyles}
+            >
+              <div className="profile-menu-items">
+                <Link to="/profile" >Profile</Link>
+                <Link to="/" onClick={handleLogout}>Logout</Link>
+              </div>
+            </Menu>
           </nav>
         </div>
       )}
