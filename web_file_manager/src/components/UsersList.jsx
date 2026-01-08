@@ -14,11 +14,16 @@ function UsersList() {
   const [users, setUsers] = useState([]);
   const [paginationData, setPaginationData] = useState([]);
   const [page, setPage] = useState(1);
-  
+
+  const goEditUser = (item) =>{
+    console.log('go to user ', item);
+  }
+
   const [headers, setHeaders] = useState([
     {name: 'Name', key: 'name'},
     {name: 'Last name', key: 'last_name'},
     {name: 'Email', key: 'email'},
+    {name: 'Actions', key: 'action', action: 'edit', type:'button', icon: 'edit', text:'', onclick: goEditUser}
   ]);
 
   let loadUsers = 0;

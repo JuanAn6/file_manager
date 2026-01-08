@@ -1,10 +1,31 @@
 
+import edit from '../../icons/edit.svg';
 
 function List({headers, items, pagination, page, changePage}) {
 
     console.log(pagination)
 
-  return (
+    const renderCellActions = (head, item) =>{
+        let icon = '';
+
+        switch(head.icon){
+            case 'edit':
+                icon = edit;
+            break;
+        }
+        
+        switch(head.type){
+            case 'button':
+                if(icon != ''){
+                    return <button onClick={ () => head.onclick(item)}><img width='20' src={icon}/> {head.text}</button>
+                }else{
+                    return <button>{head.text}</button>
+                }
+            break;
+        }
+    }
+
+    return (
     <div className='list'>
         <div className='header-section'>
             {headers.map( head => 
@@ -14,10 +35,15 @@ function List({headers, items, pagination, page, changePage}) {
             )}
         </div>
         <div className='body-section'>
-            {items.map(user => 
-                <div className='row' key={user.id}>
+            {items.map(item => 
+                <div className='row' key={item.id}>
                     {headers.map(head => 
-                        <div key={user.id+''+head.key} className='cell'>{user[head.key]}</div>
+                        head.key != 'action' ? 
+                            <div key={item.id+''+head.key} className='cell'>{item[head.key]}</div>
+                        :
+                            <div key={item.id+''+head.key} className='cell'>
+                                {renderCellActions(head, item)}
+                            </div>
                     )}
                 </div>
             )}
@@ -40,7 +66,7 @@ function List({headers, items, pagination, page, changePage}) {
             </div>
         </div>
     </div>
-  );
+    );
 }
 export default List;
 
