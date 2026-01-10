@@ -43,7 +43,7 @@ function UsersList() {
       setPaginationData(response.data);
       setLoadingComplete(true);
     } catch (error) { 
-      console.error('Error in logout:', error);
+      console.error('Error getting user list:', error);
     }
   }
 

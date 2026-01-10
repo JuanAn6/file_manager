@@ -43,7 +43,7 @@ function Home() {
       combineDirectoriesAndFiles(response.data)
       setLoadingComplete(true);
     } catch (error) { 
-      console.error('Error in logout:', error);
+      console.error('Error getting directory:', error);
     }
   }
 
@@ -90,7 +90,7 @@ function Home() {
       getDirectory();
     } catch (error) { 
       evt.target.disabled = false;
-      console.error('Error in logout:', error);
+      console.error('Error creating folder:', error);
     }
   }
   const closeModalNewFolder = ()=>{

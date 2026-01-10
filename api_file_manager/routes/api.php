@@ -22,6 +22,9 @@ Route::prefix('v1')->group(function () {
         Route::put('/user', [AuthController::class, 'updateUser']);
         Route::post('/logout', [AuthController::class, 'logout']);
 
+        //Profile
+        Route::get('/profile', [UsersController::class, 'getUser']);
+
         //Protect this routes with rols
         Route::middleware(['auth:api', 'role:superadmin'])->group(function () {
             Route::get('/get_users_list', [UsersController::class, 'getList']);

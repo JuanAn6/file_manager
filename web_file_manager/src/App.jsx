@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import emptyProfile from './icons/profile.png'
 import SearchBar from './components/custom/SearchBar';
 import Menu from './components/custom/Menu';
+import Profile from './components/Profile';
 
 
 function App() {
@@ -19,8 +20,8 @@ function App() {
     left: '100%',
     transform: 'translateX(-100%)',
     height:'fit-content',
-    'min-height': 'auto',
-    'min-width': '100px',
+    minHeight: 'auto',
+    minWidth: '100px',
   };
   
   const [navExpanded, setNavExpanded] = useState(true);
@@ -101,8 +102,7 @@ function App() {
           <Route element={<ProtectedRoute />}>  
             <Route path="/" element={<Home />} /> 
             <Route path="/users" element={<UsersList />} /> 
-            {/* <Route path="profile" element={<Profile />} /> */}
-            
+            <Route path="profile" element={<Profile />} />
           </Route>
           <Route path="*" element={<h1>404 - Not found page</h1>} />
         </Routes>

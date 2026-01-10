@@ -1,4 +1,11 @@
-.search-input-box input{
+.profile-form{
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    gap:15px;
+}
+
+.custom-input{
     padding: 5px;
     padding-left: 7px;
     padding-right: 7px;
@@ -7,17 +14,12 @@
     border: 1px solid #ccc;
 }
 
-.search-input-box input:focus{
+.custom-input:focus{
     box-shadow: 0px 0px 0px 5px #007bff3e;
     /* border: none; */
 }
-.search-input-box input:focus-visible{
+.custom-input:focus-visible{
     box-shadow: 0px 0px 0px 5px #007bff3e;
     /* border: none; */
     outline: none;
-}
-
-.search-input-box .menu-custom{
-    left: 50%;
-    transform: translateX(-50%);
 }
