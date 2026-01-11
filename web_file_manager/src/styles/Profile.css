@@ -1,8 +1,17 @@
+.profile-view{
+    display: flex;
+    gap:15px;
+}
 .profile-form{
     display: flex;
     flex-direction: column;
     width: auto;
     gap:15px;
+}
+
+.input-box{
+    display: flex;
+    flex-direction: column;
 }
 
 .custom-input{

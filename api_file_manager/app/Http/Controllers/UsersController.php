@@ -27,5 +27,9 @@ class UsersController extends Controller
         ]);
     }
 
-    
+    public function updateProfile(Request $request){
+        //Create folder if not exists and save image
+        
+        dd($request);
+    }
 }
