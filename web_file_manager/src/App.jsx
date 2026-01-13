@@ -25,6 +25,7 @@ function App() {
   };
   
   const [navExpanded, setNavExpanded] = useState(true);
+  const [profileImg, setProfileImg] = useState(null);
 
   const handleLogout = async (evt) =>{
     evt.preventDefault();
@@ -33,7 +34,7 @@ function App() {
       logout();
       navigate('/login');
     } catch (error) {
-      console.error("Error in logout:", error);
+      console.error('Error in logout:', error);
     }
   }
 
@@ -41,6 +42,25 @@ function App() {
     setNavExpanded(!navExpanded);
   }
 
+  const getProfileImage = async () =>{
+    try {
+      const response = await api.get('/get_profile_image', { responseType: 'blob' });
+      const url = URL.createObjectURL(response.data);
+      setProfileImg(url);
+    } catch (error) {
+      console.error('Not authorized or error loading...', error);
+    }
+  }
+
+  let on = 0;
+  useEffect(() => {
+    if(isAuthenticated){
+      if(on == 0){
+        getProfileImage();
+        on = 1;
+      }
+    }
+  }, [isAuthenticated]);
   
   useEffect(() => {
     //Check token every time the page changes
@@ -53,21 +73,21 @@ function App() {
     <div>
       {isAuthenticated && (
         <div>
-          <nav id="vertical-nav" className={'vertical-nav '+ (navExpanded? '':'position-out')}>
+          <nav id='vertical-nav' className={'vertical-nav '+ (navExpanded? '':'position-out')}>
             <h2 className='no-margin'>File manager</h2>
             <span>{navExpanded}</span>
             <div className='navigation-items'>
-              <Link to="/">Home</Link>
-              <Link to="/pdfs">Pdf</Link>
-              <Link to="/documents">Documnes</Link>
-              <Link to="/documents">Images</Link>
-              <Link to="/videos">Videos</Link>
-              <Link to="/audios">Audios</Link>
-              <Link to="/storage">Storage</Link>
-              <Link to="/profile">Profile</Link>
+              <Link to='/'>Home</Link>
+              <Link to='/pdfs'>Pdf</Link>
+              <Link to='/documents'>Documnes</Link>
+              <Link to='/documents'>Images</Link>
+              <Link to='/videos'>Videos</Link>
+              <Link to='/audios'>Audios</Link>
+              <Link to='/storage'>Storage</Link>
+              <Link to='/profile'>Profile</Link>
               {isAuthenticated && role == 1? 
                 <div className='admin-menu'>
-                  <Link to="/users" >Users</Link>
+                  <Link to='/users' >Users</Link>
                 </div> 
               : <></>}
             </div>
@@ -81,12 +101,20 @@ function App() {
               <SearchBar></SearchBar>
             </div>
             <Menu 
-              trigger={<img src={emptyProfile} className='profile-nav' title='Profile' />}
+              trigger={
+                <>
+                  { profileImg != null ? 
+                    <img src={profileImg} width='100' className='profile-nav' title='Profile'/>
+                    :
+                    <img src={emptyProfile} width='100' className='profile-nav' title='Profile'/>
+                  }
+                </>
+              }
               customStyle={profileMenuStyles}
             >
-              <div className="profile-menu-items">
-                <Link to="/profile" >Profile</Link>
-                <Link to="/" onClick={handleLogout}>Logout</Link>
+              <div className='profile-menu-items'>
+                <Link to='/profile' >Profile</Link>
+                <Link to='/' onClick={handleLogout}>Logout</Link>
               </div>
             </Menu>
           </nav>
@@ -96,15 +124,15 @@ function App() {
       <main className={isAuthenticated ? ('main-container '+ (navExpanded? 'vertical-expanded ':'')) : '' }>
         <Routes>
           {/* Public routes */}
-          <Route path="login" element={<Login />} />
+          <Route path='login' element={<Login />} />
 
           {/* Protected routes */}
           <Route element={<ProtectedRoute />}>  
-            <Route path="/" element={<Home />} /> 
-            <Route path="/users" element={<UsersList />} /> 
-            <Route path="profile" element={<Profile />} />
+            <Route path='/' element={<Home />} /> 
+            <Route path='/users' element={<UsersList />} /> 
+            <Route path='profile' element={<Profile />} />
           </Route>
-          <Route path="*" element={<h1>404 - Not found page</h1>} />
+          <Route path='*' element={<h1>404 - Not found page</h1>} />
         </Routes>
       </main>
     </div>

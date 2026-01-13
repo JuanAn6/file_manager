@@ -25,6 +25,7 @@ Route::prefix('v1')->group(function () {
         //Profile
         Route::get('/profile', [UsersController::class, 'getUser']);
         Route::post('/update_profile', [UsersController::class, 'updateProfile']);
+        Route::get('/get_profile_image', [UsersController::class, 'getProfileImage']);
         Route::post('/update_profile_image', [UsersController::class, 'updateProfileImage']);
 
         //Protect this routes with rols

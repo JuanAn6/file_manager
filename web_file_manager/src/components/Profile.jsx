@@ -16,7 +16,6 @@ function Profile() {
     setLoadingComplete(false);
     try {
       const response = await api.get('/profile');
-      console.log(response);
 
       let clearUser = response.data.user;
       clearUser.last_name = clearUser.last_name??'';
@@ -29,18 +28,29 @@ function Profile() {
     }
   }
 
+  const getProfileImage = async () =>{
+    try {
+      const response = await api.get('/get_profile_image', { responseType: 'blob' });
+      
+      const url = URL.createObjectURL(response.data);
+      setProfileImg(url);
+    } catch (error) {
+      console.error("Not authorized or error loading...", error);
+    }
+  }
+
+
   let on = 0;
   useEffect(()=>{
     if(on == 0){
       getUser();
+      getProfileImage();
       on = 1;
     }
   },[])
 
   const handleChangeInput = (evt)=>{
-    console.log(evt.target.name, ':', evt.target.value);
     let auxUser = {...user};
-    console.log(user);
     auxUser[evt.target.name] = evt.target.value
     setUser(auxUser);
   }
@@ -48,7 +58,6 @@ function Profile() {
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
 
-    console.log(file);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -64,16 +73,13 @@ function Profile() {
           'Content-Type': 'multipart/form-data'
         }
       });
-      
-      console.log(response);
-
+    
     }
 
   };
 
   const handleClear = () => {
     setProfileImg(null);
-    console.log(imageInputRef);
     if (imageInputRef.current) {
       imageInputRef.current.value = ""; 
     }
@@ -87,9 +93,7 @@ function Profile() {
       formData.append('user_data', {...user});
 
       const response = await api.post('/update_profile', { ...user });
-
-      console.log(response);
-
+      
       let clearUser = response.data.user;
       clearUser.last_name = clearUser.last_name??'';
       
@@ -104,7 +108,7 @@ function Profile() {
   return (
     <>
     <div className='custom-container'>
-      <h2>User</h2>
+      <h2>Profile</h2>
       {!loadingComplete ? 
         <Loading />
       :

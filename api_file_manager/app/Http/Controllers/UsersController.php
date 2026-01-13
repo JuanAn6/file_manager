@@ -39,10 +39,10 @@ class UsersController extends Controller
             
             //Remove previous image if exists
             if ($user->profile_img) {
-                Storage::disk('public')->delete($user->profile_img);
+                Storage::disk()->delete($user->profile_img);
             }
 
-            $path = $request->file('profile_img')->store('profiles/'.$user->id, 'public');
+            $path = $request->file('profile_img')->store('profiles/'.$user->id);
 
             $user->profile_img = $path;
             $user->save();
@@ -55,6 +55,18 @@ class UsersController extends Controller
 
         return response()->json(['error' => 'No se recibió ninguna imagen'], 400);
 
+    }
+
+    public function getProfileImage(Request $request){
+        $user = Auth::user();
+
+        if (!$user->profile_img || !Storage::exists($user->profile_img)) {
+            abort(404);
+        }
+        
+        $file = storage_path('app/private/' . $user->profile_img);
+
+        return response()->file($file);
     }
 
     public function updateProfile(Request $request){
