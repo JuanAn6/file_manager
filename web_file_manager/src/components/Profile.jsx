@@ -45,16 +45,28 @@ function Profile() {
     setUser(auxUser);
   }
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
 
+    console.log(file);
     if (file) {
-      console.log(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfileImg(reader.result); 
       };
       reader.readAsDataURL(file);
+
+      const formData = new FormData();
+      formData.append('profile_img', file);
+
+      const response = await api.post('/update_profile_image', formData, { 
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      
+      console.log(response);
+
     }
 
   };
@@ -67,6 +79,28 @@ function Profile() {
     }
   };
 
+  const updateProfile = async () => {
+    setLoadingComplete(false);
+    try {
+      const formData = new FormData();
+
+      formData.append('user_data', {...user});
+
+      const response = await api.post('/update_profile', { ...user });
+
+      console.log(response);
+
+      let clearUser = response.data.user;
+      clearUser.last_name = clearUser.last_name??'';
+      
+      setUser(clearUser);
+      setLoadingComplete(true);
+
+    } catch (error) { 
+      console.error('Error getting profile:', error);
+    }
+  }
+
   return (
     <>
     <div className='custom-container'>
@@ -74,7 +108,7 @@ function Profile() {
       {!loadingComplete ? 
         <Loading />
       :
-        <form className='profile-view'>
+        <form className='profile-view' onSubmit={(evt) => {evt.preventDefault(); updateProfile()}}>
             <div className='profile-form'>
               <div><span>{user.email}</span></div>
               { profileImg != null ? 

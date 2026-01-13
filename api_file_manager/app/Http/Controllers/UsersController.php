@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class UsersController extends Controller
 {
@@ -20,16 +22,52 @@ class UsersController extends Controller
 
     public function getUser(Request $request){
         $user = Auth::user();
-        //Get profile image
         return response()->json([
             'user' => $user,
-            'profile_img' => null,
         ]);
     }
 
-    public function updateProfile(Request $request){
+    public function updateProfileImage(Request $request){
         //Create folder if not exists and save image
+        $request->validate([
+            'profile_img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $user = Auth::user(); // Obtener el usuario autenticado
+
+        if ($request->hasFile('profile_img')) {
+            
+            //Remove previous image if exists
+            if ($user->profile_img) {
+                Storage::disk('public')->delete($user->profile_img);
+            }
+
+            $path = $request->file('profile_img')->store('profiles/'.$user->id, 'public');
+
+            $user->profile_img = $path;
+            $user->save();
+
+            return response()->json([
+                'message' => 'Imagen updated successfuly',
+                'path' => Storage::url($path)
+            ], 200);
+        }
+
+        return response()->json(['error' => 'No se recibió ninguna imagen'], 400);
+
+    }
+
+    public function updateProfile(Request $request){
         
-        dd($request);
+        $data = $request->all();
+
+        $auth = Auth::user();
+
+        $userdb = User::find($auth->id);
+        $userdb->name = $data['name'];
+        $userdb->last_name = $data['last_name'];
+        $userdb->save();
+
+        return response()->json(['status' => 'success', 'user' => $userdb]);
     }
 }

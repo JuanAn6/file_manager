@@ -24,6 +24,8 @@ Route::prefix('v1')->group(function () {
 
         //Profile
         Route::get('/profile', [UsersController::class, 'getUser']);
+        Route::post('/update_profile', [UsersController::class, 'updateProfile']);
+        Route::post('/update_profile_image', [UsersController::class, 'updateProfileImage']);
 
         //Protect this routes with rols
         Route::middleware(['auth:api', 'role:superadmin'])->group(function () {
