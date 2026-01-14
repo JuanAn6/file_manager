@@ -29,11 +29,24 @@ class UsersController extends Controller
 
     public function updateProfileImage(Request $request){
         //Create folder if not exists and save image
+        $data = $request->all();
+        $user = Auth::user();
+
+        if($data['profile_img'] == 'null'){
+            //Remove previous image if exists
+            if ($user->profile_img) {
+                Storage::disk()->delete($user->profile_img);
+                
+                $userdb = User::find($user->id);
+                $userdb->profile_img = null;
+                $userdb->save();
+            }
+            return response()->json(['status' => 'cleared', 'data' => $data]);
+        }
+
         $request->validate([
             'profile_img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
-        $user = Auth::user(); // Obtener el usuario autenticado
 
         if ($request->hasFile('profile_img')) {
             
@@ -60,7 +73,11 @@ class UsersController extends Controller
     public function getProfileImage(Request $request){
         $user = Auth::user();
 
-        if (!$user->profile_img || !Storage::exists($user->profile_img)) {
+        if(!$user->profile_img){
+            return response()->json(['profile_img' => null]);
+        }
+        
+        if (!Storage::exists($user->profile_img)) {
             abort(404);
         }
         

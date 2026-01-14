@@ -44,9 +44,15 @@ function App() {
 
   const getProfileImage = async () =>{
     try {
-      const response = await api.get('/get_profile_image', { responseType: 'blob' });
-      const url = URL.createObjectURL(response.data);
-      setProfileImg(url);
+      if(JSON.parse(localStorage.getItem('authUser')).profile_img != null){
+
+        const response = await api.get('/get_profile_image', { responseType: 'blob' });
+        
+        if(response.data){
+          const url = URL.createObjectURL(response.data);
+          setProfileImg(url);
+        }
+      }
     } catch (error) {
       console.error('Not authorized or error loading...', error);
     }

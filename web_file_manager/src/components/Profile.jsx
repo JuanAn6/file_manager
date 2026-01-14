@@ -58,30 +58,38 @@ function Profile() {
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
 
+    const formData = new FormData();
+    formData.append('profile_img', file);
+
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfileImg(reader.result); 
       };
       reader.readAsDataURL(file);
+    }
+
+    const response = await api.post('/update_profile_image', formData, { 
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    
+  };
+
+  const handleClear = async () => {
+    setProfileImg(null);
+    if (imageInputRef.current) {
+      imageInputRef.current.value = "";
 
       const formData = new FormData();
-      formData.append('profile_img', file);
-
+      formData.append('profile_img', null);
       const response = await api.post('/update_profile_image', formData, { 
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-    
-    }
-
-  };
-
-  const handleClear = () => {
-    setProfileImg(null);
-    if (imageInputRef.current) {
-      imageInputRef.current.value = ""; 
+      
     }
   };
 
