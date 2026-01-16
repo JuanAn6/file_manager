@@ -63,7 +63,7 @@ function FileList({items, setItems, goFolder}) {
             <th>Modified at</th>
             <th>Created at</th>
             <th>Size / Items</th>
-            <th>Actions</th>
+            {/* <th>Actions</th> */}
           </tr>
         </thead>
         <tbody>
@@ -76,12 +76,12 @@ function FileList({items, setItems, goFolder}) {
               <td className='td-date'>{formatDateFromDatabse(item.created_at)}</td>
               <td className='td-date'>{formatDateFromDatabse(item.updated_at)}</td>
               <td className='td-size'>{item.size}</td>
-              <td className='td-actions'>
+              {/* <td className='td-actions'>
                 <ActionMenu trigger={<button className='action-button' ><img width='20' src={dots_icon}/></button>}>
                   <button><img width='20' src={edit_icon}/> Edit</button>
                   <button><img width='20' src={trash_icon}/> Delete</button>
                 </ActionMenu>
-              </td>
+              </td> */}
             </tr>
           )}    
         </tbody>

@@ -6,6 +6,7 @@ import Loading from './custom/Loading';
 import FileList from './custom/FileList';
 import BreadCrumbs from './custom/BreadCrumbs';
 import Modal from './modals/ModalNewFolder';
+import '../styles/Home.css';
 
 function Home() {
   
@@ -108,7 +109,17 @@ function Home() {
         <Loading></Loading>
       :
       <>
-        <button onClick={() => setModalNewFolderOpen(true) }>New Folder</button>
+        <div className='file-list-actions'>
+
+          <button onClick={() => setModalNewFolderOpen(true) }>New Folder</button>
+
+          {items.some(e => e.checked )? 
+          <>
+            <button>Edit</button>
+            <button>Delete</button>
+          </>
+          :null}
+        </div>
         <Modal isOpen={modalNewFolderOpen} onClose={() => closeModalNewFolder() } title='Create new folder'>
           <div className='modal-container-flex-column'>
             <label htmlFor='folder_name'>New folder name</label>
