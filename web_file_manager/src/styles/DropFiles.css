@@ -1,0 +1,29 @@
+#drop-area {
+  border: 2px dashed #ccc;
+  border-radius: 20px;
+  width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  text-align: center;
+  transition: border-color 0.3s ease;
+}
+
+#drop-area.highlight {
+  border-color: #2828c8;
+  background-color: #f0f0ff;
+}
+ 
+.button {
+  display: inline-block;
+  padding: 1px;
+  padding-left: 6px;
+  padding-right: 6px;
+  background: #F0F0F0;
+  border: 1px solid black;
+  cursor: pointer;
+  border-radius: 5px;
+} 
+
+#fileElem {
+  display: none; /* Ocultamos el input feo por defecto */
+}

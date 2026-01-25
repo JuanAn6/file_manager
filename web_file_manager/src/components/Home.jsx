@@ -7,6 +7,7 @@ import FileList from './custom/FileList';
 import BreadCrumbs from './custom/BreadCrumbs';
 import Modal from './modals/ModalNewFolder';
 import '../styles/Home.css';
+import DropFiles from './custom/DropFiles';
 
 function Home() {
   
@@ -131,6 +132,7 @@ function Home() {
           </div>
         </Modal>
         <FileList items={items} setItems={setItems} goFolder={goFolder} />
+        <DropFiles></DropFiles>
       </>
       }
     </div>
