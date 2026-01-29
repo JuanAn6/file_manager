@@ -1,40 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/DropFiles.css';
+import api from '../../api/axios';
 
 function DropFiles() {
-  
-    const [files, setFiles] = useState([]);
-
-
-    
     
     function preventDefaults (e) {
         e.preventDefault();
         e.stopPropagation();
     }
 
-    
-
     function handleDrop(e) {
         let dt = e.dataTransfer;
-        setFiles(dt.files);
-        handleFiles();
+        uploadFiles(dt.files);
     }
 
-    function handleFiles() {
-        ([...files]).forEach(uploadFile);
+    function handleChange(e){
+        let files = e.target.files;
+        uploadFiles(files);
     }
 
-    function uploadFile(file) {
-        console.log("Subiendo archivo:", file.name);
-        // Aquí usarías FormData y fetch() para enviarlo a tu servidor
+    async function uploadFiles(files) {
+        const formData = new FormData();
+        files.forEach(file => { formData.append('files[]', file); });
+        
+        try {
+            const response = await api.post('/upload_files', formData);
+            console.log(response);
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     useEffect ( () => {
 
         let dropArea = document.getElementById('drop-area');
     
-        // Evitar que el navegador abra el archivo
+        // Prevents the browser opens the file
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             dropArea.addEventListener(eventName, preventDefaults, false);
         });
@@ -55,7 +56,7 @@ function DropFiles() {
         <div id="drop-area">
             <form className="my-form">
                 <p>Drop your files here or cilck on select files</p>
-                <input type="file" id="fileElem" multiple accept="image/*" onChange={handleFiles()} />
+                <input type="file" id="fileElem" multiple onChange={handleChange} />
                 <label className="button" htmlFor="fileElem">Select files</label>
             </form>
             <div id="gallery"></div> 

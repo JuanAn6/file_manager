@@ -16,6 +16,7 @@ Route::prefix('v1')->group(function () {
         //FILES AND DIRECTORIS
         Route::post('/get_directory', [HomeController::class, 'getDirectory']);
         Route::post('/create_new_folder', [HomeController::class, 'createNewFolder']);
+        Route::post('/upload_files', [HomeController::class, 'uploadFiles']);
 
         //USER
         Route::get('/user', [AuthController::class, 'getUser']);

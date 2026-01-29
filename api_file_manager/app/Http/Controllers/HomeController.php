@@ -86,4 +86,12 @@ class HomeController extends Controller
             return response()->json([ 'status' => 0, 'new_folder' => null ]);
         }
     }
+
+    public function uploadFiles(Request $request){
+        $data = $request->all();
+        
+        return response()->json([
+            'data' => $data,
+        ]);
+    }
 }
