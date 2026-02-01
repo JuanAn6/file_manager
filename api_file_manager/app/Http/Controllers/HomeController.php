@@ -90,8 +90,38 @@ class HomeController extends Controller
     public function uploadFiles(Request $request){
         $data = $request->all();
         
+        $parentId = isset($data['parent_id']) ? $data['parent_id'] : null;
+
+        $userId = Auth::user()->id;
+        $path = "users/".$userId;
+        
+        $newFiles = [];
+        foreach ($request->file('files') as $file) {
+            $filePath = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs($path, $filePath, 'public' );
+
+            //Save the file in database
+            $name = $file->getClientOriginalName();
+            $extension = $file->extension();
+            $size = $file->getSize(); //bytes
+            $mime = $file->getMimeType();
+
+            $newFiles [] = File::create([
+                'parent_id' => $parentId,
+                'user_id' => $userId,
+                'name' => $name,
+                'extension' => $extension,
+                'size' => $size,
+                'path' => $filePath,    
+                'mime' => $mime,
+            ]);
+
+        }
+
+
+
         return response()->json([
-            'data' => $data,
+            'files' => $newFiles,
         ]);
     }
 }

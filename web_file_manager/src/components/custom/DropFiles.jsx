@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../../styles/DropFiles.css';
 import api from '../../api/axios';
 
-function DropFiles() {
+function DropFiles({parentId}) {
     
     function preventDefaults (e) {
         e.preventDefault();
@@ -19,12 +19,19 @@ function DropFiles() {
         uploadFiles(files);
     }
 
+    //If the file is more larger than 100MB send it in parts?
     async function uploadFiles(files) {
         const formData = new FormData();
-        files.forEach(file => { formData.append('files[]', file); });
+        Array.from(files).forEach(file => { console.log(file); formData.append('files[]', file); });
+
+        formData.append('parent_id', parentId);
         
         try {
-            const response = await api.post('/upload_files', formData);
+            const response = await api.post('/upload_files', formData,{
+                headers:{
+                    "Content-Type": "multipart/form-data"
+                }
+            });
             console.log(response);
         } catch (err) {
             console.error(err);

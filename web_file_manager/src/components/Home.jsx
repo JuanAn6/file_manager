@@ -132,7 +132,7 @@ function Home() {
           </div>
         </Modal>
         <FileList items={items} setItems={setItems} goFolder={goFolder} />
-        <DropFiles></DropFiles>
+        <DropFiles parentId={parent}></DropFiles>
       </>
       }
     </div>

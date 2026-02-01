@@ -14,7 +14,8 @@ class File extends Model
         'name',
         'extension',
         'size',
-        'uuid',
+        'path',
+        'mime'
     ];
 
 

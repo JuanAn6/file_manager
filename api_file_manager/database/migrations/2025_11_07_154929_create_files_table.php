@@ -17,12 +17,13 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('name', 1024);
             $table->string('extension', 64);
-            $table->decimal('size', 12,4)->nullable()->default(0); //kb?
-            $table->uuid('uuid')->unique();
+            $table->decimal('size', 12,4)->nullable()->default(0); //bytes
+            $table->string('path', 256);
+            $table->string('mime',256)->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('parent_id')->references('id')->on('directory');
+            // $table->foreign('parent_id')->references('id')->on('directory');
         });
     }
 
