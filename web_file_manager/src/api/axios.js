@@ -10,7 +10,7 @@ const api = axios.create({
 // Interceptor to include the token BEFORE each request
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('authToken'); // Obtener el token del almacenamiento
+    const token = localStorage.getItem('authToken'); // Read the token from storage
     
     if (token) {
       // If it exists, attach the Authorization header

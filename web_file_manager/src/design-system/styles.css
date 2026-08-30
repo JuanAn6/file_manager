@@ -902,6 +902,8 @@ input[type="radio"]:checked::after {
   background: var(--color-accent);
   color: var(--color-accent-contrast);
 }
+/* The selected row is already an accent fill, so the tag on it has to step out
+   of the ramp entirely to stay readable. */
 .tree-item.is-selected .tag { background: var(--color-surface); color: var(--color-text); }
 
 /* Drag and drop — the target is stated by the rule, not by a glow */
