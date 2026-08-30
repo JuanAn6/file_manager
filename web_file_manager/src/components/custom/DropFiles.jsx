@@ -1,74 +1,70 @@
-import React, { useEffect, useState } from 'react';
-import '../../styles/DropFiles.css';
+import { useId, useState } from 'react';
 import api from '../../api/axios';
+import Icon from './Icon';
 
-function DropFiles({parentId}) {
-    
-    function preventDefaults (e) {
-        e.preventDefault();
-        e.stopPropagation();
+/**
+ * The file picker for the open folder.
+ *
+ * Dropping is not handled here: GlobalDropUpload covers the whole viewport, so
+ * a drop anywhere — this frame included — takes a single path and cannot upload
+ * the same files twice.
+ */
+function DropFiles({ parentId, onUploaded }) {
+  const inputId = useId();
+  const [status, setStatus] = useState(null);
+
+  const uploadFiles = async (fileList) => {
+    const files = Array.from(fileList ?? []);
+    if (files.length === 0) return;
+
+    const formData = new FormData();
+    files.forEach((file) => formData.append('files[]', file));
+    if (parentId != null) formData.append('parent_id', parentId);
+
+    setStatus({ tone: 'busy', text: `Uploading ${files.length} file(s)…` });
+
+    try {
+      await api.post('/upload_files', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      setStatus({ tone: 'ok', text: `${files.length} file(s) uploaded.` });
+      // The listing used to keep showing the folder as it was before the upload.
+      if (onUploaded) onUploaded();
+    } catch (error) {
+      console.error('Error uploading files:', error);
+      setStatus({ tone: 'error', text: 'Upload failed. Try again.' });
     }
+  };
 
-    function handleDrop(e) {
-        let dt = e.dataTransfer;
-        uploadFiles(dt.files);
-    }
+  return (
+    <div className='dropzone'>
+      <p className='kicker'>Upload</p>
+      <p style={{ margin: 0 }}>Drop your files anywhere on the page, or select them.</p>
 
-    function handleChange(e){
-        let files = e.target.files;
-        uploadFiles(files);
-    }
+      <input
+        id={inputId}
+        type='file'
+        multiple
+        onChange={(evt) => {
+          uploadFiles(evt.target.files);
+          evt.target.value = '';
+        }}
+      />
+      <label className='btn btn-secondary' htmlFor={inputId}>
+        <Icon name='upload' size={16} /> Select files
+      </label>
 
-    //If the file is more larger than 100MB send it in parts?
-    async function uploadFiles(files) {
-        const formData = new FormData();
-        Array.from(files).forEach(file => { console.log(file); formData.append('files[]', file); });
-
-        formData.append('parent_id', parentId);
-        
-        try {
-            const response = await api.post('/upload_files', formData,{
-                headers:{
-                    "Content-Type": "multipart/form-data"
-                }
-            });
-            console.log(response);
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
-    useEffect ( () => {
-
-        let dropArea = document.getElementById('drop-area');
-    
-        // Prevents the browser opens the file
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, preventDefaults, false);
-        });
-    
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropArea.addEventListener(eventName, () => dropArea.classList.add('highlight'), false);
-        });
-    
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, () => dropArea.classList.remove('highlight'), false);
-        });
-    
-        dropArea.addEventListener('drop', handleDrop, false);
-    }, []);
-
-    return (
-    <>
-        <div id="drop-area">
-            <form className="my-form">
-                <p>Drop your files here or cilck on select files</p>
-                <input type="file" id="fileElem" multiple onChange={handleChange} />
-                <label className="button" htmlFor="fileElem">Select files</label>
-            </form>
-            <div id="gallery"></div> 
-        </div>
-    </>
-    );
+      {status && (
+        <p
+          className={status.tone === 'error' ? 'field-error' : 'kicker'}
+          role='status'
+          style={{ margin: 0 }}
+        >
+          {status.text}
+        </p>
+      )}
+    </div>
+  );
 }
+
 export default DropFiles;

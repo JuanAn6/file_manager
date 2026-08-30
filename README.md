@@ -9,8 +9,9 @@ The app will be developed in React, Laravel and will need to storage the data My
 ---
 
 ## API
-
-
+```
+php artisan jwt:secret
+```
 ### Endpoints
 
 I will update all the examples of the api functions while i'm implementing them.

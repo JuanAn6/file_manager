@@ -1,64 +1,104 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
-import { useAuth } from '../context/AuthContext'; 
-import '../styles/Login.css';
-import eyeFilled from '../icons/eye-filled.svg';
-import eyeOutlined from '../icons/eye-outlined.svg';
-
+import { useAuth } from '../context/useAuth';
+import Icon from './custom/Icon';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setshowPassword] = useState('password');
+  const [showPassword, setShowPassword] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
-  const { login } = useAuth(); // Función para guardar el token globalmente
+  const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (evt) => {
+    evt.preventDefault();
+    setError('');
+    setSubmitting(true);
+
     try {
       const response = await api.post('/login', { email, password });
-      const user = response.data.user
-      const authToken = response.data.token; 
-      login(authToken, user); // Save the token in the global and localStorage states
-      
-      navigate('/'); // Redirect the user to the (protected) homepage
-
-    } catch (error) {
-      console.error("Error in login:", error.response.data);
-      alert("Not valid credentials.");
+      login(response.data.token, response.data.user);
+      navigate('/');
+    } catch (err) {
+      // A network failure has no `response`, so read it defensively instead of
+      // throwing a second error on top of the first one.
+      setError(err.response?.data?.message ?? 'Not valid credentials.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  const handleShowPassword = (e) => {
-    if(showPassword == 'password'){
-      setshowPassword('text');
-    }else{
-      setshowPassword('password');
-    }
-  }
-
   return (
-    <div className='login-container'>
-      <div className='login-box'>
-        <h2>File manager</h2>
+    <div className='login'>
+      <section className='poster login-poster'>
+        <p className='kicker' style={{ color: 'inherit', opacity: 0.8 }}>File manager</p>
+        <h1 style={{ fontSize: 'var(--text-3xl)' }}>Every file, on the grid.</h1>
+      </section>
+
+      <section className='login-panel'>
+        <p className='kicker'>Sign in</p>
+        <h2>Access your files</h2>
+
         <form onSubmit={handleSubmit} className='login-form'>
-          <input type="email" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          <input type={showPassword} name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          <div className='button-container'>
-            <button type="button" onClick={handleShowPassword}>
-              { showPassword == 'password' ?
-                <img src={eyeOutlined} alt='icon' />
-                : 
-                <img src={eyeFilled} alt='icon' />
-              }
-            </button>
-            <button type="submit">Log in</button>
+          <div className='field'>
+            <label htmlFor='email'>Email</label>
+            <input
+              id='email'
+              className='input'
+              type='email'
+              name='email'
+              autoComplete='email'
+              placeholder='you@example.com'
+              value={email}
+              onChange={(evt) => setEmail(evt.target.value)}
+              required
+            />
           </div>
+
+          <div className='field'>
+            <label htmlFor='password'>Password</label>
+            <div className='input-affix'>
+              <input
+                id='password'
+                className='input'
+                type={showPassword ? 'text' : 'password'}
+                name='password'
+                autoComplete='current-password'
+                placeholder='••••••••'
+                value={password}
+                onChange={(evt) => setPassword(evt.target.value)}
+                required
+              />
+              <button
+                type='button'
+                className='btn btn-secondary btn-icon'
+                onClick={() => setShowPassword((shown) => !shown)}
+                aria-pressed={showPassword}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                title={showPassword ? 'Hide password' : 'Show password'}
+              >
+                <Icon name={showPassword ? 'eye-off' : 'eye'} />
+              </button>
+            </div>
+          </div>
+
+          {error && (
+            <p className='field-error' role='alert'>
+              {error}
+            </p>
+          )}
+
+          <button type='submit' className='btn btn-primary btn-block' disabled={submitting}>
+            {submitting ? 'Signing in…' : 'Log in'}
+          </button>
         </form>
-      </div>
+      </section>
     </div>
   );
 }
+
 export default Login;

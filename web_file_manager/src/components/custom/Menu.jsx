@@ -1,47 +1,64 @@
-import { useState, useRef, useEffect } from "react";
-import '../../styles/Menu.css';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
-function Menu({ trigger, children, isOpen, onOpenChange, customTrigger, customStyle }) {
+function Menu({ trigger, children, isOpen, onOpenChange, customTrigger, align = 'start', width, block = false, closeOnSelect = true }) {
   const [internalOpen, setInternalOpen] = useState(false);
   const open = isOpen !== undefined ? isOpen : internalOpen;
 
   const ref = useRef(null);
 
-  const toggle = () => {
-    const newValue = !open;
-    if (onOpenChange) onOpenChange(newValue);
-    else setInternalOpen(newValue);
-  };
+  const setOpen = useCallback(
+    (value) => {
+      if (onOpenChange) onOpenChange(value);
+      else setInternalOpen(value);
+    },
+    [onOpenChange],
+  );
 
-  const setOpen = (value) => {
-    if (onOpenChange) onOpenChange(value);
-    else setInternalOpen(value);
-  };
+  const toggle = () => setOpen(!open);
 
-  // Close if click outside
+  // Close on a click outside, or on Escape.
   useEffect(() => {
-    const handleClick = e => {
-      if (ref.current && !ref.current.contains(e.target)) {
-        setOpen(false);
-      }
+    if (!open) return;
+
+    const handleClick = (evt) => {
+      if (ref.current && !ref.current.contains(evt.target)) setOpen(false);
     };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
+    const handleKey = (evt) => {
+      if (evt.key === 'Escape') setOpen(false);
+    };
+
+    document.addEventListener('mousedown', handleClick);
+    document.addEventListener('keydown', handleKey);
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+      document.removeEventListener('keydown', handleKey);
+    };
+  }, [open, setOpen]);
+
+  const position = align === 'end' ? { left: 'auto', right: 0 } : { left: 0, right: 'auto' };
 
   return (
-    <div style={{ display: "inline-block", position: "relative" }} ref={ref}>
-      <div onClick={toggle} style={{ cursor: "pointer" }}>
-        {trigger}
-      </div>
-      { customTrigger }
+    <div style={{ display: block ? 'block' : 'inline-block', position: 'relative' }} ref={ref}>
+      {trigger && (
+        <div onClick={toggle} style={{ cursor: 'pointer' }}>
+          {trigger}
+        </div>
+      )}
+      {customTrigger}
       {open && (
-        <div className='menu-custom' style={customStyle} >
+        <div
+          className='menu'
+          style={{ ...position, ...(width ? { minWidth: width } : null) }}
+          role='menu'
+          // Choosing an item closes the menu; otherwise it stays open behind
+          // whatever the item opened.
+          onClick={() => closeOnSelect && setOpen(false)}
+        >
           {children}
         </div>
       )}
     </div>
   );
-
 }
+
 export default Menu;

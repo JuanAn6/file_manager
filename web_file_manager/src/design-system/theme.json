@@ -1,0 +1,107 @@
+{
+  "name": "Modernist",
+  "description": "Flat, architectural, set entirely in Archivo. Near-mono red on white, a visible modular grid, zero corner radius, strong 2px rules.",
+  "direction": [
+    "Modular grid layouts: equal-width cells, strong horizontal and vertical rhythm, visible structure.",
+    "Strong 2px dividers between major sections.",
+    "Button labels flush left, never centered.",
+    "Photography prints in pure black and white through .grayscale."
+  ],
+  "typography": {
+    "heading": "Archivo",
+    "body": "Archivo",
+    "density": 1.0,
+    "scale": {
+      "xs": "0.75rem",
+      "sm": "0.8125rem",
+      "base": "0.9375rem",
+      "md": "1.0625rem",
+      "lg": "1.375rem",
+      "xl": "1.875rem",
+      "2xl": "2.5rem",
+      "3xl": "3.5rem"
+    },
+    "tracking": { "tight": "-0.02em", "label": "0.08em" },
+    "leading": { "tight": 1.05, "snug": 1.25, "normal": 1.5 }
+  },
+  "color": {
+    "scheme": "mono",
+    "roles": {
+      "bg": "#f3f2f2",
+      "surface": "#ffffff",
+      "text": "#201e1d",
+      "textMuted": "#6b6663",
+      "accent": "#ec3013",
+      "accentContrast": "#ffffff",
+      "divider": "#201e1d",
+      "border": "#201e1d",
+      "borderSubtle": "#d6d3d1"
+    },
+    "note": "accent-2 is a machine-derived stand-in kept only so both sets resolve; treat it as the same role as accent.",
+    "lightnessScale": {
+      "100": 0.97,
+      "200": 0.92,
+      "300": 0.85,
+      "400": 0.72,
+      "500": 0.588,
+      "600": 0.5,
+      "700": 0.42,
+      "800": 0.32,
+      "900": 0.24
+    },
+    "ramps": {
+      "neutral": { "space": "oklch", "hue": 50, "chroma": [0.002, 0.003, 0.004, 0.005, 0.006, 0.006, 0.006, 0.006, 0.006] },
+      "accent": { "space": "oklch", "hue": 34, "chroma": [0.014, 0.045, 0.09, 0.17, 0.221, 0.19, 0.16, 0.12, 0.09] },
+      "accent-2": { "space": "oklch", "hue": 34, "chroma": [0.014, 0.045, 0.09, 0.17, 0.221, 0.19, 0.16, 0.12, 0.09] }
+    },
+    "contrast": {
+      "accentOnGround": "at least 3:1 — icons, large text and interface chrome only",
+      "bodyCopyInAccent": "use --color-accent-700 on this ground, never --color-accent"
+    }
+  },
+  "space": {
+    "3xs": "2px",
+    "2xs": "4px",
+    "xs": "8px",
+    "sm": "12px",
+    "md": "16px",
+    "lg": "24px",
+    "xl": "32px",
+    "2xl": "48px",
+    "3xl": "64px",
+    "4xl": "96px"
+  },
+  "radius": { "sm": "0px", "md": "0px", "lg": "0px" },
+  "borderWidth": "2px",
+  "shadow": {
+    "sm": "0 1px 0 0 rgba(32, 30, 29, 0.18)",
+    "md": "0 2px 0 0 rgba(32, 30, 29, 0.22), 0 6px 16px -8px rgba(32, 30, 29, 0.30)",
+    "lg": "0 4px 0 0 rgba(32, 30, 29, 0.26), 0 18px 40px -16px rgba(32, 30, 29, 0.38)"
+  },
+  "icons": { "set": "lucide", "source": "https://lucide.dev", "strokeWidth": 2, "size": 20 },
+  "states": {
+    "hover": "one tint from the accent ramp (--color-accent-100 on a light ground)",
+    "pressed": "one step past the base (--color-accent-600 on light, --color-accent-400 on dark)",
+    "focusVisible": "2px solid var(--color-accent), outline-offset 2px",
+    "selection": "--color-accent-200 on --color-accent-900",
+    "disabled": "opacity 0.45"
+  },
+  "components": [
+    "btn (primary, secondary, ghost, danger, icon, block, sm)",
+    "meter + meter-fill",
+    "tree + tree-row, tree-toggle, tree-item",
+    "upload-overlay, toast, is-drop-target, is-dragging",
+    "tag (accent, accent-2, neutral, outline)",
+    "field + label, input, radio, seg + seg-opt",
+    "card (kicker, title, body, meta) + elev-sm/md/lg",
+    "nav + nav-brand + nav-link",
+    "table",
+    "dialog-backdrop + dialog (title, body, actions)",
+    "menu + menu-item",
+    "hr",
+    "grayscale",
+    "poster",
+    "spinner",
+    "shell (brand, topbar, side, main), crumbs, dropzone, pagination, login"
+  ]
+}

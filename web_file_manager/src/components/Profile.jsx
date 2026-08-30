@@ -1,151 +1,192 @@
 import { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import Loading from './custom/Loading';
-import '../styles/Profile.css';
-import emptyProfile from '../icons/profile.png'
+import Icon from './custom/Icon';
+import emptyProfile from '../icons/profile.png';
 
 function Profile() {
-
   const [loadingComplete, setLoadingComplete] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+  const [saved, setSaved] = useState(false);
   const [user, setUser] = useState(null);
   const [profileImg, setProfileImg] = useState(null);
   const imageInputRef = useRef(null);
- 
-  const getUser = async () =>{
-    setLoadingComplete(false);
-    try {
-      const response = await api.get('/profile');
 
-      let clearUser = response.data.user;
-      clearUser.last_name = clearUser.last_name??'';
-      
-      setUser(clearUser);
-      setLoadingComplete(true);
+  useEffect(() => {
+    let objectUrl = null;
+    let cancelled = false;
 
-    } catch (error) { 
-      console.error('Error getting profile:', error);
-    }
-  }
+    const load = async () => {
+      setLoadingComplete(false);
+      try {
+        const response = await api.get('/profile');
+        if (cancelled) return;
+        setUser({ ...response.data.user, last_name: response.data.user.last_name ?? '' });
+      } catch (err) {
+        console.error('Error getting profile:', err);
+        if (!cancelled) setError('The profile could not be loaded.');
+      } finally {
+        if (!cancelled) setLoadingComplete(true);
+      }
 
-  const getProfileImage = async () =>{
-    try {
-      const response = await api.get('/get_profile_image', { responseType: 'blob' });
-      
-      const url = URL.createObjectURL(response.data);
-      setProfileImg(url);
-    } catch (error) {
-      console.error("Not authorized or error loading...", error);
-    }
-  }
+      try {
+        const image = await api.get('/get_profile_image', { responseType: 'blob' });
+        if (cancelled || !image.data) return;
+        objectUrl = URL.createObjectURL(image.data);
+        setProfileImg(objectUrl);
+      } catch (err) {
+        console.error('Not authorized or error loading the profile image:', err);
+      }
+    };
 
+    load();
 
-  let on = 0;
-  useEffect(()=>{
-    if(on == 0){
-      getUser();
-      getProfileImage();
-      on = 1;
-    }
-  },[])
+    return () => {
+      cancelled = true;
+      // Blob URLs live until they are revoked; the old code leaked one per visit.
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, []);
 
-  const handleChangeInput = (evt)=>{
-    let auxUser = {...user};
-    auxUser[evt.target.name] = evt.target.value
-    setUser(auxUser);
-  }
+  const handleChangeInput = (evt) => {
+    setUser((current) => ({ ...current, [evt.target.name]: evt.target.value }));
+  };
 
-  const handleImageChange = async (e) => {
-    const file = e.target.files[0];
+  const handleImageChange = async (evt) => {
+    const file = evt.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => setProfileImg(reader.result);
+    reader.readAsDataURL(file);
 
     const formData = new FormData();
     formData.append('profile_img', file);
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImg(reader.result); 
-      };
-      reader.readAsDataURL(file);
+    try {
+      await api.post('/update_profile_image', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+    } catch (err) {
+      console.error('Error updating the profile image:', err);
+      setError('The image could not be uploaded.');
     }
-
-    const response = await api.post('/update_profile_image', formData, { 
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
-    
   };
 
   const handleClear = async () => {
     setProfileImg(null);
-    if (imageInputRef.current) {
-      imageInputRef.current.value = "";
+    if (imageInputRef.current) imageInputRef.current.value = '';
 
-      const formData = new FormData();
-      formData.append('profile_img', null);
-      const response = await api.post('/update_profile_image', formData, { 
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+    // FormData stringifies, and the API reads the literal 'null' as "clear it".
+    const formData = new FormData();
+    formData.append('profile_img', 'null');
+
+    try {
+      await api.post('/update_profile_image', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
-      
+    } catch (err) {
+      console.error('Error clearing the profile image:', err);
+      setError('The image could not be cleared.');
     }
   };
 
   const updateProfile = async () => {
-    setLoadingComplete(false);
+    setSaving(true);
+    setError('');
+    setSaved(false);
     try {
-      const formData = new FormData();
-
-      formData.append('user_data', {...user});
-
       const response = await api.post('/update_profile', { ...user });
-      
-      let clearUser = response.data.user;
-      clearUser.last_name = clearUser.last_name??'';
-      
-      setUser(clearUser);
-      setLoadingComplete(true);
-
-    } catch (error) { 
-      console.error('Error getting profile:', error);
+      setUser({ ...response.data.user, last_name: response.data.user.last_name ?? '' });
+      setSaved(true);
+    } catch (err) {
+      console.error('Error updating profile:', err);
+      setError('The profile could not be saved.');
+    } finally {
+      setSaving(false);
     }
-  }
+  };
 
   return (
-    <>
-    <div className='custom-container'>
+    <div className='card'>
+      <p className='kicker'>Account</p>
       <h2>Profile</h2>
-      {!loadingComplete ? 
+
+      {!loadingComplete ? (
         <Loading />
-      :
-        <form className='profile-view' onSubmit={(evt) => {evt.preventDefault(); updateProfile()}}>
-            <div className='profile-form'>
-              <div><span>{user.email}</span></div>
-              { profileImg != null ? 
-                <img src={profileImg} width="100" />
-                :
-                <img src={emptyProfile} width="100"/>
-              }
-              <input type='file' name='profile_img' ref={imageInputRef} onChange={handleImageChange} accept="image/*"/>
-              <div>
-                <button type='button' onClick={handleClear}>Clear image</button>
+      ) : !user ? (
+        <p className='field-error' role='alert'>{error}</p>
+      ) : (
+        <form
+          onSubmit={(evt) => {
+            evt.preventDefault();
+            updateProfile();
+          }}
+        >
+          <hr className='hr' />
+
+          <div className='grid' style={{ '--cols': 12 }}>
+            <div style={{ gridColumn: 'span 4' }}>
+              <div className='grayscale' style={{ aspectRatio: '1 / 1' }}>
+                <img src={profileImg ?? emptyProfile} alt='' />
               </div>
-              <div className='input-box'>
-                <label htmlFor='name'>Name:</label>
-                <input className='custom-input' name='name' value={user.name} onChange={handleChangeInput}/>
+
+              <div className='stack' style={{ marginTop: 'var(--space-sm)' }}>
+                <label className='btn btn-secondary' htmlFor='profile_img'>
+                  <Icon name='image' size={16} /> Change image
+                </label>
+                <input
+                  id='profile_img'
+                  type='file'
+                  name='profile_img'
+                  ref={imageInputRef}
+                  onChange={handleImageChange}
+                  accept='image/*'
+                  style={{ position: 'absolute', width: 1, height: 1, opacity: 0 }}
+                />
+                <button type='button' className='btn btn-ghost' onClick={handleClear}>
+                  <Icon name='trash' size={16} /> Clear image
+                </button>
               </div>
-              <div className='input-box'>
-                <label htmlFor='last_name'>Last name:</label>
-                <input className='custom-input' name='last_name' value={user.last_name} onChange={handleChangeInput}/>
-              </div>
-              <div><button>Save</button></div>
             </div>
+
+            <div className='stack' style={{ gridColumn: 'span 8' }}>
+              <div className='field'>
+                <span className='label'>Email</span>
+                <p style={{ margin: 0 }}>{user.email}</p>
+              </div>
+
+              <div className='field'>
+                <label htmlFor='name'>Name</label>
+                <input id='name' className='input' name='name' value={user.name ?? ''} onChange={handleChangeInput} />
+              </div>
+
+              <div className='field'>
+                <label htmlFor='last_name'>Last name</label>
+                <input
+                  id='last_name'
+                  className='input'
+                  name='last_name'
+                  value={user.last_name}
+                  onChange={handleChangeInput}
+                />
+              </div>
+
+              {error && <p className='field-error' role='alert'>{error}</p>}
+              {saved && !error && <p className='kicker' role='status'>Profile saved</p>}
+
+              <div>
+                <button type='submit' className='btn btn-primary' disabled={saving}>
+                  {saving ? 'Saving…' : 'Save'}
+                </button>
+              </div>
+            </div>
+          </div>
         </form>
-      }
+      )}
     </div>
-    </>
   );
 }
+
 export default Profile;

@@ -1,9 +1,10 @@
-import '../../styles/Loader.css';
-
-function Loading() {
+function Loading({ label = 'Loading' }) {
   return (
-    <div className='loader'></div>
+    <div className='spinner-block' role='status' aria-live='polite'>
+      <span className='spinner' />
+      {label}
+    </div>
   );
-
 }
+
 export default Loading;
