@@ -9,6 +9,7 @@ import Modal from './modals/Modal';
 import MoveToDialog from './modals/MoveToDialog';
 import DropFiles from './custom/DropFiles';
 import Icon from './custom/Icon';
+import { downloadFiles, readDownloadError } from '../utils/download';
 
 const MAX_NAME = 255;
 const DIRECTORY = 1;
@@ -44,6 +45,9 @@ function Home() {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteError, setDeleteError] = useState('');
   const [deleting, setDeleting] = useState(false);
+
+  const [downloadError, setDownloadError] = useState('');
+  const [downloading, setDownloading] = useState(false);
 
   const [moveError, setMoveError] = useState('');
   // What is currently being dragged, shared with the listing and the crumbs:
@@ -100,6 +104,32 @@ function Home() {
   };
 
   const selected = items.filter((item) => item.checked);
+  const selectedFiles = selected.filter((item) => item.type !== DIRECTORY);
+
+  /* -- Download --------------------------------------------------------- */
+
+  // Both entry points land here: the toolbar passes the selection, a row menu
+  // (or a double click on a file) passes that one row.
+  const downloadItems = async (targets) => {
+    const files = targets.filter((item) => item.type !== DIRECTORY);
+
+    if (files.length === 0) {
+      // Folders would have to be zipped server-side first; nothing does that yet.
+      setDownloadError('Folders cannot be downloaded yet. Select files instead.');
+      return;
+    }
+
+    setDownloadError('');
+    setDownloading(true);
+    try {
+      await downloadFiles(files);
+    } catch (error) {
+      console.error('Error downloading files:', error);
+      setDownloadError(await readDownloadError(error));
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   /* -- Move ------------------------------------------------------------- */
 
@@ -258,6 +288,22 @@ function Home() {
 
             {selected.length > 0 && (
               <>
+                {selectedFiles.length > 0 && (
+                  <button
+                    type='button'
+                    className='btn btn-secondary'
+                    onClick={() => downloadItems(selected)}
+                    disabled={downloading}
+                    title={
+                      selectedFiles.length === selected.length
+                        ? 'Download'
+                        : 'Only the selected files are downloaded; folders are skipped'
+                    }
+                  >
+                    <Icon name='download' size={16} />
+                    {downloading ? 'Downloading…' : `Download${selectedFiles.length > 1 ? ` (${selectedFiles.length})` : ''}`}
+                  </button>
+                )}
                 <button
                   type='button'
                   className='btn btn-secondary'
@@ -287,6 +333,7 @@ function Home() {
         ) : (
           <>
             {moveError && <p className='field-error' role='alert'>{moveError}</p>}
+            {downloadError && <p className='field-error' role='alert'>{downloadError}</p>}
             <FileList
               items={items}
               setItems={setItems}
@@ -296,6 +343,7 @@ function Home() {
               onRename={openRename}
               onMoveTo={openMove}
               onDelete={openDelete}
+              onDownload={downloadItems}
             />
             <div className='section'>
               <DropFiles parentId={parent} onUploaded={getDirectory} />

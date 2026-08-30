@@ -17,6 +17,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/get_directory', [HomeController::class, 'getDirectory']);
         Route::post('/create_new_folder', [HomeController::class, 'createNewFolder']);
         Route::post('/upload_files', [HomeController::class, 'uploadFiles']);
+        Route::get('/download_file/{id}', [HomeController::class, 'downloadFile'])->whereNumber('id');
         Route::post('/rename_item', [HomeController::class, 'renameItem']);
         Route::get('/directory_tree', [HomeController::class, 'getDirectoryTree']);
         Route::post('/move_items', [HomeController::class, 'moveItems']);

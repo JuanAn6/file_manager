@@ -14,7 +14,9 @@ browse files from a web page.
 
 - `web_file_manager/` — React 19 + Vite 7 SPA, React Router 7, Axios. No TypeScript.
 - `api_file_manager/` — Laravel 12 API (PHP 8.2) with JWT (`tymon/jwt-auth`) and MySQL.
-- Blobs live on Laravel's `local` disk; metadata lives in the `directory` and `files` tables.
+- Blobs live on the disk named by `HomeController::FILES_DISK` (`public`), under
+  `users/{user_id}/`; `files.path` stores only the basename. Metadata lives in the
+  `directory` and `files` tables.
 
 ## Commands
 
@@ -44,7 +46,10 @@ php artisan migrate
 ```
 
 `JWT_SECRET` comes from `php artisan jwt:secret`. The front end reads the API URL from
-`VITE_API_URL`.
+`VITE_API_URL` (`http://127.0.0.1:8000/api/v1`), which is why the API task pins port 8000.
+
+In VS Code, `.vscode/tasks.json` carries the same commands: `api`, `web`, and `start`, which
+runs both in parallel in their own terminals and is the default build task (Ctrl+Shift+B).
 
 ## Front end
 
@@ -120,6 +125,11 @@ Conventions already in force in `HomeController` / `UsersController` — keep th
   fallback, from a single shared constant.
 - Disk paths via `Storage::path()`, never by composing `storage_path(...)` by hand.
 - Superadmin routes sit under `middleware(['auth:api', 'role:superadmin'])`.
+- `GET /download_file/{id}` streams a blob back as an attachment. The JWT travels in a
+  header, which a link or `window.open` cannot set, so the front end fetches the body
+  (`utils/download.js`, `responseType: 'blob'`) and saves it with an anchor instead of
+  navigating. An error body therefore arrives as a blob too — `readDownloadError` reads the
+  JSON back out of it.
 
 Endpoints live in [routes/api.php](api_file_manager/routes/api.php), all under `/api/v1`.
 
@@ -143,6 +153,8 @@ created against the local API is deleted afterwards.
 ## Not done yet
 
 - Uploads are still a single `multipart` request; large files are not chunked.
-- There is no download or preview endpoint, so a file can be listed but not opened.
+- There is no preview endpoint: a file can be downloaded, but not viewed in place.
+- Folders cannot be downloaded — that needs the API to zip a subtree first. A multi-file
+  download saves one file at a time, so browsers may ask before saving a burst of them.
 - A permanent folder tree in the sidebar, doubling as a drag target, is missing.
 - `directory.items` and `directory.size` are stored as 0 and nothing recalculates them.

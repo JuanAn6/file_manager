@@ -3,6 +3,7 @@ import api from '../api/axios';
 import Loading from './custom/Loading';
 import Icon from './custom/Icon';
 import { formatDateFromDatabse, formatSize } from '../utils/utils';
+import { downloadFile, readDownloadError } from '../utils/download';
 
 const PAGE_SIZE = 25;
 
@@ -16,6 +17,21 @@ function FilesByCategory({ category, title, icon }) {
   const [files, setFiles] = useState([]);
   const [pagination, setPagination] = useState({});
   const [page, setPage] = useState(1);
+  const [downloadError, setDownloadError] = useState('');
+  const [downloadingId, setDownloadingId] = useState(null);
+
+  const download = async (file) => {
+    setDownloadError('');
+    setDownloadingId(file.id);
+    try {
+      await downloadFile(file);
+    } catch (err) {
+      console.error('Error downloading file:', err);
+      setDownloadError(await readDownloadError(err));
+    } finally {
+      setDownloadingId(null);
+    }
+  };
 
   // A different section reuses this component, so start over when it changes.
   useEffect(() => {
@@ -65,6 +81,7 @@ function FilesByCategory({ category, title, icon }) {
         <p className='field-error' role='alert'>{error}</p>
       ) : (
         <>
+          {downloadError && <p className='field-error' role='alert'>{downloadError}</p>}
           <table className='table'>
             <thead>
               <tr>
@@ -73,12 +90,13 @@ function FilesByCategory({ category, title, icon }) {
                 <th>Owner</th>
                 <th>Created at</th>
                 <th>Size</th>
+                <th className='col-fit'>Actions</th>
               </tr>
             </thead>
             <tbody>
               {files.length === 0 && (
                 <tr>
-                  <td colSpan={5} className='muted'>No files in this section yet.</td>
+                  <td colSpan={6} className='muted'>No files in this section yet.</td>
                 </tr>
               )}
 
@@ -91,6 +109,18 @@ function FilesByCategory({ category, title, icon }) {
                   <td className='muted'>{file.user?.name ?? '—'}</td>
                   <td className='num'>{formatDateFromDatabse(file.created_at)}</td>
                   <td className='num'>{formatSize(file.size)}</td>
+                  <td className='col-fit'>
+                    <button
+                      type='button'
+                      className='btn btn-ghost btn-icon'
+                      onClick={() => download(file)}
+                      disabled={downloadingId === file.id}
+                      aria-label={`Download ${file.name}`}
+                      title={`Download ${file.name}`}
+                    >
+                      <Icon name='download' />
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

@@ -168,6 +168,35 @@ class HomeController extends Controller
     }
 
     /**
+     * Stream one stored file back to its owner as an attachment. Ownership is
+     * part of the lookup, so another user's id returns 404 instead of a file.
+     *
+     * The front-end cannot navigate to this route: the JWT travels in a header,
+     * which a plain link cannot set, so it fetches the body and saves it itself.
+     */
+    public function downloadFile(int $id)
+    {
+        $userId = Auth::user()->id;
+        $file = File::where('user_id', $userId)->find($id);
+
+        if ($file === null) {
+            return response()->json(['status' => 0, 'error' => 'File not found.'], 404);
+        }
+
+        $path = 'users/' . $userId . '/' . $file->path;
+
+        // A row can outlive its blob: deleting from disk happens after the
+        // transaction commits, so a failure there leaves the row behind.
+        if (!Storage::disk(self::FILES_DISK)->exists($path)) {
+            return response()->json(['status' => 0, 'error' => 'The file is missing from storage.'], 404);
+        }
+
+        return Storage::disk(self::FILES_DISK)->download($path, $file->name, [
+            'Content-Type' => $file->mime ?: 'application/octet-stream',
+        ]);
+    }
+
+    /**
      * Rename a single file or directory. Ownership is part of the lookup, so a
      * crafted id cannot reach another user's row.
      */

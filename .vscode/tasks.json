@@ -1,0 +1,88 @@
+{
+  // Run with: Terminal > Run Task…, or Ctrl+Shift+B for "start" (the default).
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "api",
+      "detail": "Laravel API on http://127.0.0.1:8000",
+      "type": "shell",
+      "command": "php",
+      // The port is explicit on purpose: artisan silently picks the next free
+      // one when 8000 is taken, and the front-end would then talk to nothing.
+      "args": ["artisan", "serve", "--port=8000"],
+      "options": {
+        "cwd": "${workspaceFolder}/api_file_manager"
+      },
+      // A server never exits, so VS Code must not wait for it to finish.
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "group": "servers",
+        "panel": "dedicated",
+        "reveal": "always",
+        "clear": true
+      }
+    },
+    {
+      "label": "web",
+      "detail": "Vite dev server on http://localhost:5173",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "dev"],
+      "options": {
+        "cwd": "${workspaceFolder}/web_file_manager"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "group": "servers",
+        "panel": "dedicated",
+        "reveal": "always",
+        "clear": true
+      }
+    },
+    {
+      "label": "start",
+      "detail": "Back end and front end together",
+      // Both terminals share the "servers" presentation group, so they open
+      // side by side instead of hiding one behind the other.
+      "dependsOn": ["api", "web"],
+      "dependsOrder": "parallel",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "lint",
+      "detail": "ESLint over the front end",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "lint"],
+      "options": {
+        "cwd": "${workspaceFolder}/web_file_manager"
+      },
+      "problemMatcher": ["$eslint-stylish"],
+      "presentation": {
+        "panel": "shared",
+        "clear": true
+      }
+    },
+    {
+      "label": "build",
+      "detail": "Production build of the front end",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "build"],
+      "options": {
+        "cwd": "${workspaceFolder}/web_file_manager"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "panel": "shared",
+        "clear": true
+      }
+    }
+  ]
+}

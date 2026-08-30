@@ -15,6 +15,7 @@ function FileList({
   onRename,
   onMoveTo,
   onDelete,
+  onDownload,
 }) {
   const allChecked = items.length > 0 && items.every((item) => item.checked);
   const [dropTargetId, setDropTargetId] = useState(null);
@@ -29,6 +30,8 @@ function FileList({
     setItems(items.map((item, i) => (i === index ? { ...item, checked: select } : item)));
   };
 
+  // Only folders open on a double click. Downloading a file is an explicit
+  // action from the row menu or the toolbar, never something a stray click does.
   const openItem = (item) => {
     if (item.type === DIRECTORY) goFolder(item.id);
   };
@@ -175,6 +178,11 @@ function FileList({
                     </span>
                   }
                 >
+                  {item.type !== DIRECTORY && (
+                    <button type='button' className='menu-item' onClick={() => onDownload([item])}>
+                      <Icon name='download' size={16} /> Download
+                    </button>
+                  )}
                   <button type='button' className='menu-item' onClick={() => onRename([item])}>
                     <Icon name='pencil' size={16} /> Rename
                   </button>
